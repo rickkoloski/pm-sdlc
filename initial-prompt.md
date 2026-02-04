@@ -35,8 +35,25 @@ Please read:
 |------|-------------|
 | Start new deliverable | "Let's create a spec for D[next number]: [feature name]" |
 | Implement a spec | "Please implement D42 following the planning doc" |
-| Archive completed work | "Let's organize the chronicles - see ~/src/SDLC/process/chronicle_organization.md" |
-| Check process | "What's our SDLC workflow?" → CC reads ~/src/SDLC/process/overview.md |
+| Archive completed work | "Let's organize the chronicles" |
+| **Reconcile ad hoc work** | **"Let's catalog our ad hoc work"** |
+| Check process | "What's our SDLC workflow?" |
+
+---
+
+## After Ad Hoc Work
+
+Been doing quick fixes without formal specs? That's fine. When ready to reconcile:
+
+```
+Let's catalog our ad hoc work.
+
+Please:
+1. Read ~/src/SDLC/process/ad_hoc_reconciliation.md
+2. Review commits since last formal deliverable
+3. Propose how to document what we've done
+4. Help me update any specs that need it
+```
 
 ---
 
@@ -46,6 +63,7 @@ Please read:
 |------|---------|
 | `~/src/SDLC/BOOTSTRAP.md` | How to initialize a project |
 | `~/src/SDLC/process/overview.md` | The workflow |
+| `~/src/SDLC/process/ad_hoc_reconciliation.md` | Rejoining process after ad hoc work |
 | `~/src/SDLC/templates/` | Document templates |
 | `./CLAUDE.md` | Project-specific context |
 | `./docs/current_work/` | Active deliverables |

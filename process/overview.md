@@ -129,3 +129,29 @@ See `chronicle_organization.md` for detailed process.
 3. **Centralized by concept** — Related work belongs together
 4. **Indexes for navigation** — `_index.md` enables targeted context loading
 5. **Archives preserve memory** — Chronicles are long-term project memory
+6. **Process accommodates reality** — Ad hoc work is legitimate; reconcile periodically
+
+---
+
+## Ad Hoc Work
+
+Not everything needs the full Spec → Planning → Result flow.
+
+**Legitimate ad hoc work:**
+- Bug fixes and CC corrections
+- UI tweaks (move a button, adjust spacing)
+- Missed requirements discovered during implementation
+- Quick iterations based on feedback
+
+**When to go ad hoc:**
+- Work is small (<30 min)
+- It's a correction, not a new feature
+- Full spec would be overhead
+
+**Reconciliation:** Periodically say **"Let's catalog our ad hoc work"** to:
+- Review what was done since last formal deliverable
+- Update specs if requirements changed
+- Create lightweight completion records if needed
+- Resume formal process cleanly
+
+See `ad_hoc_reconciliation.md` for the full process.
