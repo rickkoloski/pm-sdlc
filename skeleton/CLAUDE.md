@@ -111,10 +111,12 @@ If unsure about process, reference `~/src/SDLC/process/overview.md`.
 |---------|--------|
 | "Let's catalog our ad hoc work" | Reconcile informal work back into the process. Read `~/src/SDLC/process/ad_hoc_reconciliation.md` and follow it. |
 | "Let's organize the chronicles" | Archive completed work. Read `~/src/SDLC/process/chronicle_organization.md` and follow it. |
+| "Let's run an SDLC compliance audit" | Audit project against SDLC standards. Read `~/src/SDLC/process/compliance_audit.md` and follow it. |
 | "What are my SDLC commands?" | Show this table. |
 
 **Key references:**
 - `~/src/SDLC/process/overview.md` — Workflow
 - `~/src/SDLC/process/ad_hoc_reconciliation.md` — Rejoining process after ad hoc work
 - `~/src/SDLC/process/chronicle_organization.md` — Archiving
+- `~/src/SDLC/process/compliance_audit.md` — Compliance auditing
 - `docs/templates/` — Document templates

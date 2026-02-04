@@ -213,7 +213,8 @@ done
 ### Next Steps
 1. Review the concept indexes for accuracy
 2. Start using deliverable IDs (D1, D2, ...) for new work
-3. See docs/process/overview.md for workflow details
+3. Run an SDLC compliance audit: "Let's run an SDLC compliance audit"
+4. See docs/process/overview.md for workflow details
 ```
 
 ---

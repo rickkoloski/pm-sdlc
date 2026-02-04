@@ -37,6 +37,7 @@ Please read:
 | Implement a spec | "Please implement D42 following the planning doc" |
 | Archive completed work | "Let's organize the chronicles" |
 | **Reconcile ad hoc work** | **"Let's catalog our ad hoc work"** |
+| **Audit compliance** | **"Let's run an SDLC compliance audit"** |
 | Check process | "What's our SDLC workflow?" |
 
 ---
@@ -64,6 +65,7 @@ Please:
 | `~/src/SDLC/BOOTSTRAP.md` | How to initialize a project |
 | `~/src/SDLC/process/overview.md` | The workflow |
 | `~/src/SDLC/process/ad_hoc_reconciliation.md` | Rejoining process after ad hoc work |
+| `~/src/SDLC/process/compliance_audit.md` | Auditing project compliance |
 | `~/src/SDLC/templates/` | Document templates |
 | `./CLAUDE.md` | Project-specific context |
 | `./docs/current_work/` | Active deliverables |

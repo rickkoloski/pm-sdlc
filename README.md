@@ -35,13 +35,16 @@ SDLC/
 │   ├── overview.md           # High-level workflow
 │   ├── deliverable_lifecycle.md
 │   ├── chronicle_organization.md
-│   └── collaboration_model.md
+│   ├── collaboration_model.md
+│   ├── ad_hoc_reconciliation.md
+│   └── compliance_audit.md
 ├── templates/                # Document templates
 │   ├── spec_template.md
 │   ├── planning_template.md
 │   ├── cc_prompt_template.md
 │   ├── stepwise_result_template.md
-│   └── concept_index_template.md
+│   ├── concept_index_template.md
+│   └── compliance_audit_template.md
 ├── examples/                 # Filled-out examples
 │   ├── spec_example.md
 │   ├── planning_example.md
@@ -80,3 +83,4 @@ Sequential identifiers (D1, D2, ... Dnn) that track work across the project life
 - `BOOTSTRAP.md` — Detailed initialization instructions for CC
 - `process/overview.md` — Complete process documentation
 - `process/chronicle_organization.md` — How to archive completed work
+- `process/compliance_audit.md` — How to audit project compliance

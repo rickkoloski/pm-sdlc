@@ -155,3 +155,21 @@ Not everything needs the full Spec → Planning → Result flow.
 - Resume formal process cleanly
 
 See `ad_hoc_reconciliation.md` for the full process.
+
+---
+
+## Compliance Auditing
+
+Periodically verify the project follows SDLC standards:
+
+**Trigger:** Say **"Let's run an SDLC compliance audit"**
+
+CC will:
+- Check CLAUDE.md for compliance section and commands
+- Verify all file references are valid
+- Confirm `_index.md` coverage in concept chronicles
+- Check templates and current_work hygiene
+- Produce a proposal with gaps, severity ratings, and recommended fixes
+- Wait for approval before making changes
+
+See `compliance_audit.md` for the full process.
