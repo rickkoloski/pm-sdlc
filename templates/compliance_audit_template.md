@@ -8,14 +8,16 @@
 
 ## Summary
 
-| Area | Status | Severity |
-|------|--------|----------|
-| CLAUDE.md compliance directive | [Present / Missing] | [High / Medium / Low] |
-| CLAUDE.md references | [N broken / All valid] | [High / Medium / Low] |
-| `_index.md` coverage | [X of Y] | [High / Medium / Low] |
-| Template library | [X of 5] | [High / Medium / Low] |
-| current_work hygiene | [Clean / N orphaned items] | [High / Medium / Low] |
-| Directory structure | [Standard / Deviations noted] | [High / Medium / Low / Info] |
+| Area | Status | Severity | Resolution |
+|------|--------|----------|------------|
+| CLAUDE.md compliance directive | [Present / Missing] | [High / Medium / Low] | -- |
+| CLAUDE.md references | [N broken / All valid] | [High / Medium / Low] | -- |
+| `_index.md` coverage | [X of Y] | [High / Medium / Low] | -- |
+| Template library | [X of 5] | [High / Medium / Low] | -- |
+| current_work hygiene | [Clean / N orphaned items] | [High / Medium / Low] | -- |
+| Directory structure | [Standard / Deviations noted] | [High / Medium / Low / Info] | -- |
+
+**Resolution markers:** `--` not yet reviewed, `APPROVED` fix accepted, `DECIDED` user chose an option, `DONE` fix implemented, `SKIPPED` no action taken
 
 ---
 

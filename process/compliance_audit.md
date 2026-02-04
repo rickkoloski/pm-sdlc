@@ -118,9 +118,28 @@ Write a compliance proposal using the template at `~/src/SDLC/templates/complian
 - Recommended implementation order
 - Non-standard items that are acceptable (informational)
 
-### Phase 4: Get Approval
+### Phase 4: Walk Through Gaps One by One
 
-Present the proposal to the user. Do NOT make changes without approval.
+Present each gap to the user individually for approval. This keeps decisions focused and avoids overwhelming the user with the full proposal at once.
+
+**For each gap:**
+1. State the gap title and severity
+2. Summarize the recommendation concisely
+3. Ask for approval (or present options if a decision is needed)
+4. Implement immediately on approval
+5. Update the summary table's Resolution column
+
+**Resolution tracking markers:**
+
+| Marker | Meaning |
+|--------|---------|
+| `--` | Not yet reviewed |
+| `APPROVED` | User approved the proposed fix |
+| `DECIDED` | User chose between options |
+| `DONE` | Fix implemented |
+| `SKIPPED` | User chose no action |
+
+Update the Resolution column in the summary table as each gap is addressed. This provides a live progress view within the proposal document itself.
 
 **Decision points to surface:**
 - Any gap where multiple fix approaches exist
@@ -129,7 +148,7 @@ Present the proposal to the user. Do NOT make changes without approval.
 
 ### Phase 5: Implement
 
-After approval, implement fixes in this order:
+After approval, implement fixes in this order (or immediately per gap if using the one-by-one approach):
 
 1. **CLAUDE.md updates** — Highest impact, enables all other SDLC features
 2. **Template copies** — Quick win, no risk
