@@ -105,12 +105,13 @@ This project follows the SDLC framework from `~/src/SDLC/`.
 
 If unsure about process, reference `~/src/SDLC/process/overview.md`.
 
-**Recognized commands:**
+### SDLC Commands
 
 | Command | Action |
 |---------|--------|
 | "Let's catalog our ad hoc work" | Reconcile informal work back into the process. Read `~/src/SDLC/process/ad_hoc_reconciliation.md` and follow it. |
 | "Let's organize the chronicles" | Archive completed work. Read `~/src/SDLC/process/chronicle_organization.md` and follow it. |
+| "What are my SDLC commands?" | Show this table. |
 
 **Key references:**
 - `~/src/SDLC/process/overview.md` — Workflow
