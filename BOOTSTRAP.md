@@ -139,14 +139,19 @@ For each categorized document:
 
 ### 3.6 Create/Update CLAUDE.md
 
-Ensure project has a CLAUDE.md with:
-- Project purpose
-- Technology stack
-- Current work locations
-- Key APIs/patterns
-- **SDLC compliance directive** (see below)
+**IMPORTANT: Do NOT overwrite existing CLAUDE.md files.**
 
-Use `~/src/SDLC/skeleton/CLAUDE.md` as a starting template.
+For projects with existing CLAUDE.md:
+1. Read the existing file completely
+2. Preserve all existing content (project purpose, stack, APIs, conventions)
+3. **Add** the SDLC compliance section (see below) if not present
+4. **Add** references to docs/current_work/ and chronicle locations if not present
+
+For projects without CLAUDE.md:
+- Use `~/src/SDLC/skeleton/CLAUDE.md` as a starting template
+- Customize for the specific project
+
+The goal is to **augment**, not replace.
 
 **CRITICAL:** Add this directive to enforce process compliance:
 
