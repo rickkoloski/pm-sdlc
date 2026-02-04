@@ -144,8 +144,31 @@ Ensure project has a CLAUDE.md with:
 - Technology stack
 - Current work locations
 - Key APIs/patterns
+- **SDLC compliance directive** (see below)
 
 Use `~/src/SDLC/skeleton/CLAUDE.md` as a starting template.
+
+**CRITICAL:** Add this directive to enforce process compliance:
+
+```markdown
+## SDLC Process Compliance
+
+This project follows the SDLC framework from `~/src/SDLC/`.
+
+**CC must:**
+- Follow the deliverable workflow (Spec → Planning → Implementation → Result)
+- Use deliverable IDs (D1, D2, ...) for all new work
+- Create specs before implementing non-trivial features
+- Document completions in stepwise_results/
+- Ask before deviating from established process
+
+**Do not:**
+- Skip the spec phase for significant work
+- Implement features without deliverable IDs
+- Deviate from the process without explicit approval
+
+If unsure about process, reference `~/src/SDLC/process/overview.md`.
+```
 
 ---
 

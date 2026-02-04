@@ -87,11 +87,25 @@ project/
 
 ---
 
-## SDLC Process
+## SDLC Process Compliance
 
 This project follows the SDLC framework from `~/src/SDLC/`.
 
-See:
+**CC must:**
+- Follow the deliverable workflow (Spec → Planning → Implementation → Result)
+- Use deliverable IDs (D1, D2, ...) for all new work
+- Create specs before implementing non-trivial features
+- Document completions in stepwise_results/
+- Ask before deviating from established process
+
+**Do not:**
+- Skip the spec phase for significant work
+- Implement features without deliverable IDs
+- Deviate from the process without explicit approval
+
+If unsure about process, reference `~/src/SDLC/process/overview.md`.
+
+**Key references:**
 - `~/src/SDLC/process/overview.md` — Workflow
 - `~/src/SDLC/process/chronicle_organization.md` — Archiving
 - `docs/templates/` — Document templates
