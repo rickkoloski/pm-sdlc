@@ -1,7 +1,7 @@
 # DNN: Feature Name — CC Prompt
 
 **Spec:** `dNN_feature_name_spec.md`
-**Instructions:** `dNN_feature_name_instructions.md`
+**Plan:** `dNN_feature_name_plan.md`
 
 ---
 

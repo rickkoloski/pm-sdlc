@@ -77,7 +77,7 @@ Moved to chronicles for long-term reference.
 | State | File Pattern |
 |-------|--------------|
 | Draft/Ready | `dNN_name_spec.md` |
-| Planning | `dNN_name_instructions.md` |
+| Planning | `dNN_name_plan.md` |
 | Prompt | `dNN_name_prompt.md` |
 | Complete | `dNN_name_COMPLETE.md` |
 | Blocked | `dNN_name_BLOCKED.md` |

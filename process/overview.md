@@ -17,7 +17,7 @@ Create `docs/current_work/specs/dNN_name_spec.md`
 - Set success criteria
 
 ### 3. Planning
-Create `docs/current_work/planning/dNN_name_instructions.md`
+Create `docs/current_work/planning/dNN_name_plan.md`
 - Step-by-step implementation guide
 - Specific files and functions to modify
 - API signatures and patterns to follow
@@ -107,6 +107,28 @@ chronicle_by_step/
 - Never reused, even if work is abandoned
 - Used in filenames: `d42_memory_formation_spec.md`
 - Referenced in commits: "feat: implement D42 memory formation"
+
+---
+
+## File Suffix Convention
+
+All documentation files carry a type suffix so that a file's purpose is self-evident regardless of where it lives.
+
+| Type | Suffix | Example |
+|------|--------|---------|
+| Specification | `_spec.md` | `d42_memory_formation_spec.md` |
+| Planning/Instructions | `_plan.md` | `d42_memory_formation_plan.md` |
+| Prompt (CC instructions) | `_prompt.md` | `d42_memory_formation_prompt.md` |
+| Completion record | `_COMPLETE.md` | `d42_memory_formation_COMPLETE.md` |
+| Issue/blocker | `_BLOCKED.md` | `d42_memory_formation_BLOCKED.md` |
+| Reference/archived | `_ref.md` | `project_overview_ref.md` |
+| Roadmap | `_roadmap.md` | `next_steps_roadmap.md` |
+
+**Why this matters:**
+1. **Context-free identification** — A file named `tpv_research_spec.md` is unambiguously a spec in a directory listing, git log, grep result, or cross-agent chat
+2. **Multi-agent workflows** — When CD and multiple CC instances share file references, the suffix eliminates "which file do you mean?"
+3. **Search and automation** — `find . -name "*_COMPLETE.md"` finds all completion records; `*_spec.md` finds all specs
+4. **Directory structure is additive** — The directory (`specs/`, `planning/`) still provides organization, but the suffix ensures the file is self-describing even without it
 
 ---
 

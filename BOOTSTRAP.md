@@ -232,7 +232,7 @@ done
 
 ### Planning (`planning/`)
 **Purpose:** Define HOW to build it
-**Naming:** `dNN_feature_name_instructions.md`
+**Naming:** `dNN_feature_name_plan.md`
 **Contains:**
 - Step-by-step implementation guide
 - Code locations to modify
