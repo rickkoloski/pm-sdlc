@@ -144,6 +144,46 @@ See `chronicle_organization.md` for detailed process.
 
 ---
 
+## Tester Knowledge Capture
+
+When a tester agent (human or AI) completes a test pass, the test results document should include a **Navigation & Learnings** section that captures reusable knowledge:
+
+### Required Sections in Test Results
+
+**Navigation Paths** — How to reach each test area:
+- Exact URLs, click sequences, scroll directions needed
+- UI quirks (e.g., "must scroll right to see Actions column")
+- Which icons/buttons to click and where they are
+
+**Lessons Learned** — What future testers should know:
+- Common gotchas encountered during testing
+- Data prerequisites (e.g., "need at least one assigned user to test unassign")
+- Timing issues (e.g., "wait for toast to dismiss before re-opening flyout")
+- Environment-specific notes (e.g., "dev has no email data populated")
+
+**Why this matters:** Testing the same UI areas repeatedly is expensive. Captured navigation paths let future test runs skip the discovery phase and go straight to verification. This compounds — each test pass makes the next one faster and more thorough.
+
+---
+
+## Updating This Process
+
+When the team discovers process improvements, gaps, or new conventions during real work:
+
+**Trigger:** Say **"Let's update the SDLC"**
+
+CC will:
+- Read the current SDLC changelog at `process/sdlc_changelog.md`
+- Discuss the proposed addition or change
+- Update the relevant canonical files
+- Append to the changelog with date, description, and rationale
+- Wait for approval before committing
+
+The changelog serves as a living record of how the process evolves through use. Not every change needs a formal proposal — often the best improvements emerge from noticing friction during real work.
+
+See `process/sdlc_changelog.md` for the change history.
+
+---
+
 ## Key Principles
 
 1. **Specs before code** — Define what before implementing how
@@ -152,6 +192,7 @@ See `chronicle_organization.md` for detailed process.
 4. **Indexes for navigation** — `_index.md` enables targeted context loading
 5. **Archives preserve memory** — Chronicles are long-term project memory
 6. **Process accommodates reality** — Ad hoc work is legitimate; reconcile periodically
+7. **Capture testing knowledge** — Tester navigation paths and learnings compound across runs
 
 ---
 
