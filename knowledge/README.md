@@ -8,10 +8,11 @@ Deep, structured knowledge organized by discipline. Each subdirectory contains p
 knowledge/
 ├── README.md                  ← This file
 ├── data-modeling/             ← UDM patterns, anti-patterns, assessment templates
+├── product-research/          ← Competitive analysis methodology, dimension catalog
 └── testing/                   ← Tool patterns, component strategies, gotchas, timing
 ```
 
-Future disciplines (architecture, coding, deployment, etc.) will add directories here as their knowledge matures beyond the parking-lot stage in `disciplines/`.
+Other disciplines (architecture, coding, deployment, etc.) will add directories here as their knowledge matures beyond the parking-lot stage in `disciplines/`.
 
 ## Relationship to Other Directories
 
