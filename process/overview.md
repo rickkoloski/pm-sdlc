@@ -3,7 +3,7 @@
 ## The Flow
 
 ```
-Idea → Spec → Planning → Prompt → Implementation → Result → Chronicle
+Idea → Spec → Planning → Prompt → Implementation → Validation → Deploy → Result → Chronicle
 ```
 
 ### 1. Idea
@@ -34,14 +34,47 @@ CC (or human) executes the work:
 - Create/modify code
 - Run tests
 
-### 6. Result
+### 6. Validation (stage gate)
+A deliverable is not deployable until it passes validation. Validation follows the **5-phase hybrid testing workflow**:
+
+| Phase | Tool | Output |
+|-------|------|--------|
+| **1. Explore** | CCP (Chrome Plugin) | Exploratory testing — verify features work, discover issues |
+| **2. Specify** | CC | Test specs in markdown format (`docs/testing/specs/dNN_name.spec.md`) |
+| **3. Generate** | CC / PW Test Agents | Executable Playwright `.spec.ts` files (`e2e/` directory) |
+| **4. Execute** | Playwright CLI | Deterministic test run — all tests must pass |
+| **5. Heal** | CC / PW Healer Agent | Auto-repair failing tests when UI changes (future runs) |
+
+**Minimum bar:** Phases 1-4 must complete with all tests passing before proceeding to Deploy. Phase 5 applies to subsequent runs when existing tests break due to new changes.
+
+**Knowledge capture:** Each validation cycle updates project-specific testing knowledge:
+- `docs/testing/knowledge/app-map.yaml` — new routes, navigation changes
+- `docs/testing/knowledge/element-catalog.yaml` — new page locators
+- `docs/testing/knowledge/layer0-upstream.yaml` — new risk areas, acceptance criteria
+- `docs/testing/knowledge/timing-profile.yaml` — measured waits for new components
+
+Cross-project knowledge updates go to `~/src/ops/sdlc/testing-knowledge/`.
+
+**When to skip phases:** Ad hoc work (bug fixes, UI tweaks <30 min) may skip Phases 2-4 if Phase 1 (exploratory CCP) provides sufficient confidence. Document the rationale in the result doc.
+
+### 7. Deploy (stage gate)
+Deployment is gated by validation:
+- **Prerequisite:** All Playwright tests pass (Phase 4 green)
+- **Action:** Deploy to staging/production per project deployment docs
+- **Verification:** Post-deploy smoke test (health checks, auth, key endpoints)
+- **Parallel option:** CD may authorize early deployment for human review while Playwright tests run in parallel, but the deliverable is not marked Complete until both gates pass
+
+A deliverable deployed without passing validation remains **In Progress**, not Complete.
+
+### 8. Result
 Create `docs/current_work/stepwise_results/dNN_name_COMPLETE.md`
 - What was implemented
 - Files changed
-- Test outcomes
+- Test outcomes (CCP + Playwright results)
+- Deploy verification
 - Any deviations
 
-### 7. Chronicle
+### 9. Chronicle
 Periodically move completed work to archives:
 - `chronicle_by_concept/` — organized by domain
 - `chronicle_by_step/` — organized chronologically
@@ -193,6 +226,8 @@ See `process/sdlc_changelog.md` for the change history.
 5. **Archives preserve memory** — Chronicles are long-term project memory
 6. **Process accommodates reality** — Ad hoc work is legitimate; reconcile periodically
 7. **Capture testing knowledge** — Tester navigation paths and learnings compound across runs
+8. **Validation before deployment** — Playwright tests must pass before code ships
+9. **Deploy is a process step** — Not an afterthought; gated by validation, verified by smoke tests
 
 ---
 

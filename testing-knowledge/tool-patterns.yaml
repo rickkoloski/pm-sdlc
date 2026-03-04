@@ -1,0 +1,80 @@
+# Cross-Project Tool Patterns
+# How to use each tool effectively. Learned from actual test sessions.
+# Last updated: 2026-02-22 (initial — from Rockcut CLI verification)
+
+playwright_cli:
+  version: "1.59.0-alpha"
+  install: "npm install -g @playwright/cli@latest && playwright-cli install"
+
+  session_lifecycle:
+    - "playwright-cli open [url]  # starts browser, url optional"
+    - "playwright-cli goto <url>   # navigate within session"
+    - "playwright-cli close        # end session"
+    - "playwright-cli list         # see active sessions"
+    - "playwright-cli kill-all     # clean up stale/zombie processes"
+
+  snapshot_workflow:
+    description: "Snapshots return YAML accessibility trees saved to .playwright-cli/"
+    steps:
+      - "playwright-cli snapshot    # saves .yml file, returns path"
+      - "Read the YAML to get element refs (e4, e12, etc.)"
+      - "Use refs in subsequent commands: click e12, fill e15 'text'"
+    notes:
+      - "Refs are session-scoped — they change on every snapshot"
+      - "Snapshot after navigation to get fresh refs"
+      - "YAML files are compact (~100 lines for a full page)"
+
+  auth_pattern:
+    description: "Login once, save state, reload on future sessions"
+    steps:
+      - "playwright-cli goto <login-url>"
+      - "playwright-cli snapshot  # get field refs"
+      - "playwright-cli fill <email-ref> '<email>'"
+      - "playwright-cli fill <password-ref> '<password>'"
+      - "playwright-cli click <submit-ref>"
+      - "Sleep 2s for redirect"
+      - "playwright-cli state-save  # saves cookies + localStorage to JSON"
+    reuse: "state-load or --storage-state on next session"
+
+  key_behaviors:
+    - "open command may land on about:blank — use goto to navigate"
+    - "headless is default (no --headless flag needed; it errors if you pass it)"
+    - "click auto-generates role-based Playwright code (getByRole, getByTestId)"
+    - "fill targets specific elements by ref, not by selector"
+    - "Screenshots save as PNG on disk, not returned inline"
+
+  token_profile:
+    per_task_estimate: "~27k tokens (vs ~114k for MCP)"
+    snapshot_size: "~100-200 lines YAML per page"
+    key_advantage: "Data stays on disk, only loaded when agent reads file"
+
+claude_chrome_plugin:
+  abbreviation: "CCP"
+  best_for:
+    - "Exploratory testing with visual feedback"
+    - "Primed validation with Layer 0 context"
+    - "Testing with your actual logged-in session"
+    - "GIF recording of test runs"
+  limitations:
+    - "Single WebSocket — goes stale, silent failures"
+    - "No headless mode, no CI/CD"
+    - "Chrome/Edge only"
+    - "Tool schemas consume ~15.4k tokens"
+  key_tools:
+    reliable:
+      - "tabs_context_mcp — always call first"
+      - "tabs_create_mcp — always create new tabs"
+      - "navigate — reliable page navigation"
+      - "read_page — best for DataGrid verification"
+    moderate:
+      - "computer (screenshot) — good for visual, can't read values"
+      - "form_input — works for standard inputs"
+    low_reliability:
+      - "find — poor for complex DOM (DataGrid); prefer read_page"
+
+playwright_mcp:
+  abbreviation: "PW MCP"
+  role: "Fallback if CLI has issues. Same capabilities, higher token cost."
+  setup: "claude mcp add playwright npx '@playwright/mcp@latest'"
+  token_cost: "~114k per task (tool schemas alone ~13.7k)"
+  when_to_use: "Sandboxed environments without filesystem access"

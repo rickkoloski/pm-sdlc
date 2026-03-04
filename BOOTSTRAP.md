@@ -90,7 +90,7 @@ Ask: "Does this categorization look correct? Any adjustments before I create the
 
 ```bash
 # Create from skeleton
-cp -r ~/src/SDLC/skeleton/docs/* PROJECT/docs/
+cp -r ~/src/ops/sdlc/skeleton/docs/* PROJECT/docs/
 
 # Remove template placeholders
 rm -rf PROJECT/docs/chronicle_by_concept/_template_concept
@@ -128,7 +128,7 @@ For each concept, create `_index.md`:
 ### 3.4 Copy Templates
 
 ```bash
-cp ~/src/SDLC/templates/* PROJECT/docs/templates/
+cp ~/src/ops/sdlc/templates/* PROJECT/docs/templates/
 ```
 
 ### 3.5 Move Existing Documents
@@ -148,7 +148,7 @@ For projects with existing CLAUDE.md:
 4. **Add** references to docs/current_work/ and chronicle locations if not present
 
 For projects without CLAUDE.md:
-- Use `~/src/SDLC/skeleton/CLAUDE.md` as a starting template
+- Use `~/src/ops/sdlc/skeleton/CLAUDE.md` as a starting template
 - Customize for the specific project
 
 The goal is to **augment**, not replace.
@@ -158,7 +158,7 @@ The goal is to **augment**, not replace.
 ```markdown
 ## SDLC Process Compliance
 
-This project follows the SDLC framework from `~/src/SDLC/`.
+This project follows the SDLC framework from `~/src/ops/sdlc/`.
 
 **CC must:**
 - Follow the deliverable workflow (Spec → Planning → Implementation → Result)
@@ -172,7 +172,7 @@ This project follows the SDLC framework from `~/src/SDLC/`.
 - Implement features without deliverable IDs
 - Deviate from the process without explicit approval
 
-If unsure about process, reference `~/src/SDLC/process/overview.md`.
+If unsure about process, reference `~/src/ops/sdlc/process/overview.md`.
 ```
 
 ---

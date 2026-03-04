@@ -89,7 +89,7 @@ project/
 
 ## SDLC Process Compliance
 
-This project follows the SDLC framework from `~/src/SDLC/`.
+This project follows the SDLC framework from `~/src/ops/sdlc/`.
 
 **CC must:**
 - Follow the deliverable workflow (Spec → Planning → Implementation → Result)
@@ -103,21 +103,21 @@ This project follows the SDLC framework from `~/src/SDLC/`.
 - Implement features without deliverable IDs
 - Deviate from the process without explicit approval
 
-If unsure about process, reference `~/src/SDLC/process/overview.md`.
+If unsure about process, reference `~/src/ops/sdlc/process/overview.md`.
 
 ### SDLC Commands
 
 | Command | Action |
 |---------|--------|
-| "Let's catalog our ad hoc work" | Reconcile informal work back into the process. Read `~/src/SDLC/process/ad_hoc_reconciliation.md` and follow it. |
-| "Let's organize the chronicles" | Archive completed work. Read `~/src/SDLC/process/chronicle_organization.md` and follow it. |
-| "Let's run an SDLC compliance audit" | Audit project against SDLC standards. Read `~/src/SDLC/process/compliance_audit.md` and follow it. |
-| "Let's update the SDLC" | Propose and record a process improvement. Read `~/src/SDLC/process/sdlc_changelog.md`, discuss the change, update relevant canonical files, and append to the changelog. |
+| "Let's catalog our ad hoc work" | Reconcile informal work back into the process. Read `~/src/ops/sdlc/process/ad_hoc_reconciliation.md` and follow it. |
+| "Let's organize the chronicles" | Archive completed work. Read `~/src/ops/sdlc/process/chronicle_organization.md` and follow it. |
+| "Let's run an SDLC compliance audit" | Audit project against SDLC standards. Read `~/src/ops/sdlc/process/compliance_audit.md` and follow it. |
+| "Let's update the SDLC" | Propose and record a process improvement. Read `~/src/ops/sdlc/process/sdlc_changelog.md`, discuss the change, update relevant canonical files, and append to the changelog. |
 | "What are my SDLC commands?" | Show this table. |
 
 **Key references:**
-- `~/src/SDLC/process/overview.md` — Workflow
-- `~/src/SDLC/process/ad_hoc_reconciliation.md` — Rejoining process after ad hoc work
-- `~/src/SDLC/process/chronicle_organization.md` — Archiving
-- `~/src/SDLC/process/compliance_audit.md` — Compliance auditing
+- `~/src/ops/sdlc/process/overview.md` — Workflow
+- `~/src/ops/sdlc/process/ad_hoc_reconciliation.md` — Rejoining process after ad hoc work
+- `~/src/ops/sdlc/process/chronicle_organization.md` — Archiving
+- `~/src/ops/sdlc/process/compliance_audit.md` — Compliance auditing
 - `docs/templates/` — Document templates

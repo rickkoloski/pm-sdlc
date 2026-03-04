@@ -3,7 +3,7 @@
 ## States
 
 ```
-[Draft] → [Ready] → [In Progress] → [Complete] → [Archived]
+[Draft] → [Ready] → [In Progress] → [Validated] → [Deployed] → [Complete] → [Archived]
                  ↘ [Blocked] ↗
 ```
 
@@ -27,9 +27,27 @@ Work cannot proceed.
 - File: `dNN_name_BLOCKED.md` in `issues/`
 - Contains: what's blocked, why, what's needed
 
+### Validated
+Implementation passes all testing gates.
+- Phase 1 (CCP exploratory): all scenarios pass
+- Phases 2-3 (test specs + Playwright generation): test files created
+- Phase 4 (Playwright execution): all tests green
+- Testing knowledge updated (app-map, element-catalog, layer0, timing)
+- Status marker: `**Status:** Validated`
+
+### Deployed
+Code is live in staging/production and verified.
+- Deployment completed per project deployment docs
+- Post-deploy smoke tests pass (health checks, auth, key endpoints)
+- Seed data verified if applicable
+- Status marker: `**Status:** Deployed`
+
+**Note:** CD may authorize early deployment for human review while Playwright tests run in parallel. In this case, the deliverable moves to Deployed before Validated, but cannot move to Complete until both gates pass.
+
 ### Complete
-Implementation is finished and verified.
+Implementation is finished, validated, and deployed.
 - File: `dNN_name_COMPLETE.md` in `stepwise_results/`
+- Includes: CCP results, Playwright results, deploy verification
 - Status marker: `**Status:** Complete`
 
 ### Archived
@@ -50,10 +68,21 @@ Moved to chronicles for long-term reference.
 - CC begins implementation
 - Or: human begins implementation
 
-### In Progress → Complete
-- All tasks finished
-- Tests pass
-- Result document created
+### In Progress → Validated
+- Code compiles clean (backend + frontend)
+- CCP exploratory testing passes (Phase 1)
+- Playwright test specs written (Phase 2)
+- Playwright tests generated and passing (Phases 3-4)
+- Testing knowledge files updated
+
+### Validated → Deployed
+- Prerequisite: Validated state reached (all tests green)
+- Code deployed to target environment
+- Post-deploy smoke tests pass
+
+### Deployed → Complete
+- Both Validated and Deployed states confirmed
+- Result document created with full test + deploy outcomes
 
 ### In Progress → Blocked
 - Obstacle encountered

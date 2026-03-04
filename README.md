@@ -15,8 +15,8 @@ This framework defines:
 To apply this framework to an existing project:
 
 1. Open the project in Claude Code
-2. Add this directory to your workspace: `~/src/SDLC`
-3. Say: **"Let's implement the SDLC process from ~/src/SDLC"**
+2. Add this directory to your workspace: `~/src/ops/sdlc`
+3. Say: **"Let's implement the SDLC process from ~/src/ops/sdlc"**
 
 CC will:
 - Analyze your existing documentation

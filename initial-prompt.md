@@ -5,10 +5,10 @@
 Copy and paste this prompt to Claude Code:
 
 ```
-I'd like to implement the SDLC process from ~/src/SDLC in this project.
+I'd like to implement the SDLC process from ~/src/ops/sdlc in this project.
 
 Please:
-1. Read ~/src/SDLC/BOOTSTRAP.md for instructions
+1. Read ~/src/ops/sdlc/BOOTSTRAP.md for instructions
 2. Analyze my existing documentation
 3. Propose a structure and categorization
 4. Wait for my approval before creating anything
@@ -19,10 +19,10 @@ Please:
 ## For Existing Projects (with docs already organized)
 
 ```
-This project uses the SDLC process from ~/src/SDLC.
+This project uses the SDLC process from ~/src/ops/sdlc.
 
 Please read:
-- ~/src/SDLC/process/overview.md for workflow
+- ~/src/ops/sdlc/process/overview.md for workflow
 - ./CLAUDE.md for project-specific context
 - ./docs/current_work/ for active deliverables
 ```
@@ -50,7 +50,7 @@ Been doing quick fixes without formal specs? That's fine. When ready to reconcil
 Let's catalog our ad hoc work.
 
 Please:
-1. Read ~/src/SDLC/process/ad_hoc_reconciliation.md
+1. Read ~/src/ops/sdlc/process/ad_hoc_reconciliation.md
 2. Review commits since last formal deliverable
 3. Propose how to document what we've done
 4. Help me update any specs that need it
@@ -62,10 +62,10 @@ Please:
 
 | File | Purpose |
 |------|---------|
-| `~/src/SDLC/BOOTSTRAP.md` | How to initialize a project |
-| `~/src/SDLC/process/overview.md` | The workflow |
-| `~/src/SDLC/process/ad_hoc_reconciliation.md` | Rejoining process after ad hoc work |
-| `~/src/SDLC/process/compliance_audit.md` | Auditing project compliance |
-| `~/src/SDLC/templates/` | Document templates |
+| `~/src/ops/sdlc/BOOTSTRAP.md` | How to initialize a project |
+| `~/src/ops/sdlc/process/overview.md` | The workflow |
+| `~/src/ops/sdlc/process/ad_hoc_reconciliation.md` | Rejoining process after ad hoc work |
+| `~/src/ops/sdlc/process/compliance_audit.md` | Auditing project compliance |
+| `~/src/ops/sdlc/templates/` | Document templates |
 | `./CLAUDE.md` | Project-specific context |
 | `./docs/current_work/` | Active deliverables |
