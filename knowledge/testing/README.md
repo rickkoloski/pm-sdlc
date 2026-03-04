@@ -6,7 +6,7 @@ Project-specific knowledge lives in each project's `docs/testing/knowledge/`.
 ## Structure
 
 ```
-testing-knowledge/
+knowledge/testing/
 ├── README.md                          ← This file
 ├── tool-patterns.yaml                 ← How to use PW CLI, CCP, etc.
 ├── component-catalog.yaml             ← Test strategies for shared UI components

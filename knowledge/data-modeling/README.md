@@ -7,7 +7,7 @@ Organized by **business concept** (how a domain expert thinks about it), not by 
 ## Structure
 
 ```
-data-modeling-knowledge/
+knowledge/data-modeling/
 ├── README.md                       ← This file
 ├── patterns/                       ← Core UDM patterns (one YAML per subject area)
 │   ├── people-and-organizations.yaml   ← Party/Role (the foundational pattern)
@@ -70,7 +70,7 @@ implementations:
 
 ## Relationship to Testing Knowledge
 
-Same structural philosophy as `testing-knowledge/`:
+Same structural philosophy as `knowledge/testing/`:
 - Cross-project knowledge lives here
 - Project-specific adaptations live in each project's docs
 - Knowledge accumulates across engagements

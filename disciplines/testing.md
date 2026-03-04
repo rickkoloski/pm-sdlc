@@ -2,7 +2,7 @@
 
 **Status**: Adopted — codified in `process/overview.md` (Validation phase) and `process/deliverable_lifecycle.md` (Validated/Deployed states)
 **Architecture reference**: `improvement-ideas/hybrid-browser-testing.md`
-**Knowledge store**: `testing-knowledge/` (cross-project), project `docs/testing/knowledge/` (project-specific)
+**Knowledge store**: `knowledge/testing/` (cross-project), project `docs/testing/knowledge/` (project-specific)
 **Spec format prototype**: `improvement-ideas/test-spec-format-draft.md`
 
 ## Summary
@@ -114,8 +114,8 @@ Mobile testing pipeline proven end-to-end against deployed DEV environment.
 - `tests/mobile/mobile-smoke.spec.ts` — 6 smoke tests
 
 ### Gotchas discovered
-- `gcp-vm-disk-full-truncated-bundles` — Docker images fill VM disk, nginx serves corrupted JS (see `testing-knowledge/gotchas.yaml`)
-- `mobile-locators-differ-from-desktop` — responsive layouts change placeholders and DOM structure (see `testing-knowledge/gotchas.yaml`)
+- `gcp-vm-disk-full-truncated-bundles` — Docker images fill VM disk, nginx serves corrupted JS (see `knowledge/testing/gotchas.yaml`)
+- `mobile-locators-differ-from-desktop` — responsive layouts change placeholders and DOM structure (see `knowledge/testing/gotchas.yaml`)
 
 ### Deployment prerequisite
 DEV environment must be healthy before mobile tests run. Deploy: `./scripts/deploy_harmoniq.sh deploy DEV`. If deploy fails with disk space error, prune Docker on VM first.

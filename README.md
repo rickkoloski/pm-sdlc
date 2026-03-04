@@ -38,6 +38,10 @@ SDLC/
 │   ├── collaboration_model.md
 │   ├── ad_hoc_reconciliation.md
 │   └── compliance_audit.md
+├── knowledge/                # Cross-project discipline knowledge
+│   ├── data-modeling/        # UDM patterns, anti-patterns, assessments
+│   └── testing/              # Tool patterns, gotchas, component strategies
+├── disciplines/              # Discipline overviews and parking lots
 ├── templates/                # Document templates
 │   ├── spec_template.md
 │   ├── planning_template.md

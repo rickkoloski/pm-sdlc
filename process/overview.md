@@ -53,7 +53,7 @@ A deliverable is not deployable until it passes validation. Validation follows t
 - `docs/testing/knowledge/layer0-upstream.yaml` — new risk areas, acceptance criteria
 - `docs/testing/knowledge/timing-profile.yaml` — measured waits for new components
 
-Cross-project knowledge updates go to `~/src/ops/sdlc/testing-knowledge/`.
+Cross-project knowledge updates go to `~/src/ops/sdlc/knowledge/testing/`.
 
 **When to skip phases:** Ad hoc work (bug fixes, UI tweaks <30 min) may skip Phases 2-4 if Phase 1 (exploratory CCP) provides sufficient confidence. Document the rationale in the result doc.
 

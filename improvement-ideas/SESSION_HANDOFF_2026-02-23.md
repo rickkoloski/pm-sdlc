@@ -27,7 +27,7 @@
 - 5 testability debt items found on Brands page alone
 
 ### Step 3: Knowledge Store Bootstrap — DONE
-**Cross-project** (`~/src/ops/sdlc/testing-knowledge/`):
+**Cross-project** (`~/src/ops/sdlc/knowledge/testing/`):
 - `tool-patterns.yaml` — PW CLI, CCP, PW MCP usage patterns
 - `component-catalog.yaml` — MUI DataGrid, FormDialog, StatusChip, PageHeader test strategies
 - `gotchas.yaml` — 7 failure patterns (DOM!=visual, server-down, StrictMode, virtual scroll, etc.)
@@ -108,7 +108,7 @@ D10 user creation auth bug — created users can't log in. Don't test user manag
 |------|---------|
 | `ops/sdlc/improvement-ideas/hybrid-browser-testing.md` | Main design doc (~700+ lines) |
 | `ops/sdlc/improvement-ideas/test-spec-format-draft.md` | Spec format prototype (Brands page) |
-| `ops/sdlc/testing-knowledge/*.yaml` | Cross-project knowledge (4 files) |
+| `ops/sdlc/knowledge/testing/*.yaml` | Cross-project knowledge (4 files) |
 | `ops/sdlc/disciplines/*.md` | Discipline parking lots (8 files + README) |
 | `rockcut/docs/testing/knowledge/*.yaml` | Rockcut project knowledge (4 files + README) |
 | `rockcut/docs/testing/browser_automation_playbook.md` | Existing playbook (reference, content decomposed into layers) |

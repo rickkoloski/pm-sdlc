@@ -78,7 +78,7 @@ disciplines/
 
 **When a discipline matures** (enough patterns to formalize):
 
-1. Distill parking lot into structured knowledge (like testing-knowledge/ YAML files)
+1. Distill parking lot into structured knowledge (like knowledge/testing/ YAML files)
 2. Design skill definitions from the patterns
 3. Parking lot becomes the skill's design history
 
@@ -89,7 +89,7 @@ disciplines/
 | `process/` | Phase definitions — *when* work happens |
 | `disciplines/` | Capability definitions — *what* capabilities are applied |
 | `templates/` | Phase-oriented artifacts (spec, plan, result) |
-| `testing-knowledge/` | Discipline-specific knowledge store (testing is the first) |
+| `knowledge/` | Discipline-specific knowledge stores (testing, data-modeling, etc.) |
 | `improvement-ideas/` | Active design work on discipline improvements |
 
 The phase and discipline views are complementary, not competing. A deliverable still flows through phases (Spec → Plan → Implement → Result). But at each phase, multiple disciplines contribute — and each discipline accumulates knowledge that persists beyond any single deliverable.
