@@ -1,10 +1,35 @@
 # Architecture Discipline
 
-**Status**: Parking lot — capturing ideas as they emerge from other work
+**Status**: Active — backend capability assessment
 
 ## Scope
 
-System design, component boundaries, integration patterns, technology choices, cross-project patterns.
+System design, component boundaries, integration patterns, technology choices, cross-project patterns. Assessing what a backend currently supports and estimating the cost of adding capabilities that unlock desired feature scope.
+
+## Backend Capability Assessment
+
+**When to invoke:** After competitive analysis produces a scoped feature definition with open questions, and before UX modeling finalizes the design. The backend assessment bridges "what should we build?" with "what CAN we build?"
+
+**What it produces:**
+- Backend inventory summary (API surface, database, services, auth, existing patterns)
+- Capability matrix mapping feature dimensions to support levels (Supported / Partial / New / Infrastructure)
+- Cost estimates with T-shirt sizing and dependency chains
+- Scope recommendation organized by effort tier (ship now, quick wins, significant investment, revisit later)
+
+**How to use the output:** Map each effort tier back to the competitive analysis scoping questions. This gives the product owner cost-aware information to adjust scope decisions.
+
+**Knowledge store:** `knowledge/architecture/` — methodology in `backend-capability-assessment.yaml`, stack-specific patterns in `technology-patterns.yaml`
+
+**Pipeline position:**
+```
+/feature-compare → scope questions → product owner picks target scope
+  ↓
+/backend-assess → capability matrix, cost estimates    ← THIS
+  ↓
+/ux-model → IA, wireframes, specs (informed by what's feasible)
+  ↓
+spec → plan → implement
+```
 
 ## Parking Lot
 
