@@ -1,6 +1,6 @@
 # Cross-Project Component Test Strategies
 # How to test shared UI components regardless of which project uses them.
-# Last updated: 2026-02-22 (initial — extracted from Rockcut playbook + CLI exploration)
+# Last updated: 2026-03-13 (added cross-tenant data-testid catalog)
 
 mui_datagrid:
   description: "MUI DataGrid v8 (@mui/x-data-grid) and datagrid-extended wrapper"
@@ -92,6 +92,39 @@ status_chip:
     issue: "Color conveyed only via CSS, not in accessibility tree"
     proposed_fix: "Add aria-label='Status: {value}' or data-testid='status-chip-{value}'"
     impact: "Cannot verify correct color via accessibility tree alone — requires computed style check"
+
+cross_tenant_elements:
+  description: "UI elements with data-testid for cross-tenant visibility testing"
+  applies_to:
+    - "harmoniq (projects, resource assignments, gantt)"
+
+  testid_catalog:
+    projects_page:
+      project_row: "data-testid='project-row-{id}' — wrapping Box per project in table"
+      project_name: "data-testid='project-name' — clickable Typography with project name"
+      quick_assign_button: "data-testid='quick-assign-button' — IconButton to open QuickAssignFlyout"
+
+    quick_assign_flyout:
+      search_input: "data-testid='people-search-input' — TextField wrapper (use 'input' descendant for typing)"
+      person_option: "data-testid='people-option-{id}' — li element per person in autocomplete dropdown"
+      cross_tenant_badge: "data-testid='cross-tenant-badge' — TenantInitialsBadge on guest users"
+
+    gantt:
+      task_name: "data-testid='task-name-{id}' — span with task name, clickable to open modal"
+
+    task_modal:
+      tab_details: "data-testid='task-tab-details' — Details tab"
+      description_input: "data-testid='task-description-input' — TextField wrapper (use 'textarea' descendant)"
+      save_button: "data-testid='task-modal-save' — Save/Create button"
+      cancel_button: "data-testid='task-modal-cancel' — Cancel button"
+      edit_button: "data-testid='task-modal-edit' — Edit button (visible in view mode only)"
+
+  selector_patterns:
+    autocomplete_options: "[role='listbox'] [role='option']"
+    dialog: "[role='dialog']"
+    notes:
+      - "MUI Autocomplete renders options in a portal — use role selectors, not DOM hierarchy"
+      - "Gantt opens task modal in edit mode (not view), so task-modal-edit won't be visible"
 
 page_header:
   description: "PageHeader — breadcrumbs + title + optional action button"

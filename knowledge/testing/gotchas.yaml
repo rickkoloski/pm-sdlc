@@ -1,7 +1,7 @@
 # Cross-Project Gotchas
 # Failure patterns learned from test runs. Read before every test session.
 # Each entry: symptom, cause, resolution, prevention.
-# Last updated: 2026-02-23 (cycle 1 — added MUI popover + CLI snapshot gotchas)
+# Last updated: 2026-03-13 (added multi-tenant subscription, SecurityRole vs capability, data-testid, cross-tenant scoping gotchas)
 
 - id: dom-not-visual
   severity: high
@@ -116,3 +116,39 @@
   prevention: "When writing tests for both desktop and mobile, check both viewports' DOM before choosing locators. Consider a locator helper that returns viewport-appropriate selectors."
   discovered: "2026-02-23 — mobile-smoke.spec.ts 'Message input accessible' test failed because locator [placeholder^='Message #'] doesn't match mobile input"
   applies_to: "all projects with responsive/mobile layouts"
+
+- id: multi-tenant-subscription-gating
+  severity: high
+  symptom: "Login succeeds (200 OK) but /users/current returns 402 Payment Required — storageState has no security_roles, page shows landing instead of app"
+  cause: "ModelAPI base_controller checks BizTxnAccount with type tenant_subscription for active StatusApplication. Non-root tenants without active subscriptions get 402 on all authenticated endpoints."
+  resolution: "Ensure seed/setup creates BizTxnAccount + StatusApplication(active) for each test tenant. The seed's setup_subscriptions must always ensure active status, not skip existing accounts that lack it."
+  prevention: "Every test tenant setup must include subscription activation. Add subscription check to test health-check/prerequisite step."
+  discovered: "2026-03-13 — cross-tenant tests, portablemind had BizTxnAccount but no active StatusApplication"
+  applies_to: "all multi-tenant ModelAPI projects"
+
+- id: security-role-vs-capability-confusion
+  severity: high
+  symptom: "User has all capabilities (143 including Projects:view) but gets redirected to /app/no-access or Tickets page"
+  cause: "Frontend route guards (useFeatureAccess) check SecurityRole assignments (app_projects, app_chat, etc.), NOT individual capabilities. Having capabilities on a role doesn't help if the user isn't assigned the app-level SecurityRole. Capabilities gate CRUD operations; SecurityRoles gate app-level navigation access."
+  resolution: "Seed must create AND assign app-level SecurityRoles (app_projects, app_chat, app_files, app_admin) in addition to capability-bearing roles (tenant_admin, basic)."
+  prevention: "When debugging 'no access' issues, check user.security_roles for app_* roles first, not capabilities. Compare with a working tenant's role assignments."
+  discovered: "2026-03-13 — cross-tenant seed only created tenant_admin/basic roles but frontend checks for app_projects"
+  applies_to: "Harmoniq frontend (any tenant provisioning or test setup)"
+
+- id: fragile-css-selectors-in-tests
+  severity: medium
+  symptom: "Tests break when CSS classes change, or use complex locator chains (.task-name:has-text, tr:has(text=...) etc.) that are hard to read and maintain"
+  cause: "Tests target CSS class names or DOM structure rather than stable test identifiers"
+  resolution: "Add data-testid attributes to key UI elements and use them in tests. One-time investment that makes tests immune to styling/layout changes."
+  prevention: "When writing new UI components, include data-testid on interactive and assertable elements. When writing tests, prefer [data-testid=...] over CSS/text selectors."
+  discovered: "2026-03-13 — cross-tenant tests rewrote from CSS selectors to data-testid, reducing fragility and improving readability"
+  applies_to: "all projects using Playwright"
+
+- id: cross-tenant-visibility-is-tenant-scoped
+  severity: medium
+  symptom: "Test expects per-user isolation of cross-tenant parties, but all host-tenant users see guest parties"
+  cause: "Cross-tenant party visibility (Individual.by_tenant) operates at tenant relationship level, not per-user. If tenants A and B have a tenant_collaboration relationship, ALL users in tenant B see ALL users in tenant A. The shared_users metadata controls which guest users get shared, not which host users can see them."
+  resolution: "Align test expectations with actual scoping model. Test isolation by checking that non-shared guest members (e.g., Russell from portablemind) don't appear, not that shared guest members are hidden from specific host users."
+  prevention: "Before writing access-control tests, verify the actual scoping model in the backend (check model.by_tenant, controller concerns). Don't assume per-user isolation without evidence."
+  discovered: "2026-03-13 — TST-CT-04 expected brewer1 (host) not to see Rick (guest), but visibility is tenant-level"
+  applies_to: "Harmoniq cross-tenant features"

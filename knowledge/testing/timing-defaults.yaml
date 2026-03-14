@@ -1,6 +1,6 @@
 # Cross-Project Timing Defaults
 # Default wait profiles by component type. Override with project-specific measurements.
-# Last updated: 2026-02-22 (initial — from Rockcut playbook)
+# Last updated: 2026-03-13 (added multi-tenant login and cross-tenant autocomplete timings)
 
 # Note: Playwright CLI waits for actionability automatically (element visible, enabled, stable).
 # These timings are for explicit waits when auto-wait is insufficient.
@@ -54,3 +54,13 @@ localstorage_persistence:
   description: "Write to localStorage + verify on reload"
   default_wait_ms: 0
   notes: "Synchronous — but test must include full page refresh, not just re-render (see gotcha: react-strictmode-double-mount)"
+
+multi_tenant_login:
+  description: "Login with tenant field filling + redirect + auth state verification (roles + capabilities)"
+  default_wait_ms: 8000
+  notes: "Includes: fill form, POST /session, redirect to /app/, wait for security_roles + capabilities in localStorage (capabilities load via separate API call). First login ~8s, cached storageState ~0s."
+
+cross_tenant_autocomplete:
+  description: "Open people picker and wait for cross-tenant options to load"
+  default_wait_ms: 3000
+  notes: "Includes: click autocomplete, API fetch with cross-tenant scoping, render options. Cross-tenant queries may be slower than same-tenant due to additional joins."
