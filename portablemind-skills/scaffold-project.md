@@ -56,6 +56,9 @@ If `scaffolding.descriptions` is set, read the referenced file. Descriptions are
 - `sprint.phase` — description for each Sprint N task (depth 0, reused across all sprints)
 - `sprint.{event_key}` — description for each event task (depth 1, reused across all sprints)
 
+**For moments:** `### moment.{key}` (e.g., `### moment.friction`)
+- Each moment gets its own description explaining what it feels like and when to add structure
+
 **For program_increments:** `### pi.{element}` (e.g., `### pi.pi_planning`)
 - `pi.phase` — description for each PI N task (depth 0, reused across all PIs)
 - `pi.iteration` — description for each Iteration N task (depth 1, reused)
@@ -75,7 +78,7 @@ Else:
 total_weeks = total_days / 7  (keep as float)
 ```
 
-**If `structure_type` is `phases`, continue with Steps 3-8. If `sprints`, skip to Steps 3s-6s. If `program_increments`, skip to Steps 3p-7p.**
+**If `structure_type` is `phases`, continue with Steps 3-8. If `sprints`, skip to Steps 3s-6s. If `program_increments`, skip to Steps 3p-7p. If `moments`, skip to Steps 3m-4m.**
 
 ---
 
@@ -427,6 +430,46 @@ Repeat for all PIs. Each PI gets the same internal structure; iteration count ma
 
 ---
 
+## Moments Algorithm (Prototyping)
+
+The lightest scaffolding. No date subdivision — moments are states you recognize, not time blocks. All moment tasks span the full project duration. Teams advance them through statuses as they occur.
+
+### Step 3m: Create Moment Tasks (Depth 0)
+
+For each moment in the `moments` list:
+
+```
+general_crud_tool:
+  model_name: "Task"
+  action: "create"
+  attributes:
+    name: "{moment.label}"
+    project_id: {project_id}
+    tenant_id: 22
+    start_date: {project_start}
+    due_date: {project_end}
+    description: "{descriptions[moment.key]}"
+
+apply_status_tool:
+  model_name: "Task"
+  id: {task_id}
+  status: "task_not_started"
+```
+
+### Step 4m: Usage Guidance
+
+After creating the tasks, inform the user:
+
+- Move each moment to **In Progress** when you recognize you're in that state
+- Move to **Completed** when the moment has passed
+- Moments are not sequential — you may revisit Friction multiple times
+- When **Commitment** is reached, choose a target lifecycle for ongoing work
+- **Reentry** only applies to breakout prototypes that need to rejoin a structured lifecycle
+
+No date calculation needed. Total tasks = number of moments (typically 5).
+
+---
+
 ## Date Rules
 
 1. **Week-based calculation:** Durations (phase or sprint) are in whole weeks. This produces clean Mon–Fri boundaries naturally.
@@ -490,7 +533,7 @@ To add scaffolding support to a new lifecycle:
 - `sprints` — repeating timebox pattern (Scrum)
 - `program_increments` — repeating timeboxes with internal structure (SAFe)
 - `columns` — flow-based, no temporal divisions (Kanban) — not yet implemented
-- `moments` — non-linear progression (Prototyping) — not yet implemented
+- `moments` — non-linear progression, no date subdivision (Prototyping)
 
 ## Validation Checklist
 

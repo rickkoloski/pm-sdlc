@@ -39,6 +39,15 @@ moments:
       - findings documented and communicated to the parent lifecycle
       - artifacts mapped to the target lifecycle's expectations
       - decision made on what to keep vs. discard
+scaffolding:
+  structure_type: moments
+  descriptions: portablemind-skills/prototyping-descriptions.md
+  moments:
+    - { key: spark, label: "Spark" }
+    - { key: friction, label: "Friction" }
+    - { key: traction, label: "Traction" }
+    - { key: commitment, label: "Commitment" }
+    - { key: reentry, label: "Reentry" }
 ---
 
 # Prototyping Lifecycle
