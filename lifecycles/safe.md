@@ -53,6 +53,16 @@ configurations:
   large_solution: "multiple ARTs, adds solution train coordination"
   portfolio: "adds strategic alignment, lean portfolio management, epic kanban"
   full: "all four levels active (hundreds of practitioners)"
+scaffolding:
+  structure_type: program_increments
+  descriptions: portablemind-skills/safe-descriptions.md
+  configuration: essential
+  pi_length_weeks: 10
+  iteration_length_weeks: 2
+  ip_iteration_weeks: 2
+  pi_events:
+    - { key: pi_planning, label: "PI Planning", position: start, days: 2 }
+    - { key: inspect_and_adapt, label: "Inspect & Adapt", position: end, days: 1 }
 ---
 
 # SAFe Lifecycle (Scaled Agile Framework)

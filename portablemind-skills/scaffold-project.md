@@ -56,6 +56,11 @@ If `scaffolding.descriptions` is set, read the referenced file. Descriptions are
 - `sprint.phase` — description for each Sprint N task (depth 0, reused across all sprints)
 - `sprint.{event_key}` — description for each event task (depth 1, reused across all sprints)
 
+**For program_increments:** `### pi.{element}` (e.g., `### pi.pi_planning`)
+- `pi.phase` — description for each PI N task (depth 0, reused across all PIs)
+- `pi.iteration` — description for each Iteration N task (depth 1, reused)
+- `pi.{event_key}` — description for PI Planning, IP Iteration, Inspect & Adapt
+
 If no descriptions file exists, tasks are created without descriptions.
 
 ### Step 2: Calculate Project Dates
@@ -70,7 +75,7 @@ Else:
 total_weeks = total_days / 7  (keep as float)
 ```
 
-**If `structure_type` is `phases`, continue with Steps 3-8. If `sprints`, skip to Steps 3s-6s.**
+**If `structure_type` is `phases`, continue with Steps 3-8. If `sprints`, skip to Steps 3s-6s. If `program_increments`, skip to Steps 3p-7p.**
 
 ---
 
@@ -311,6 +316,117 @@ Repeat for all sprints. Each sprint gets the same set of events with the same de
 
 ---
 
+## Program Increments Algorithm (Essential SAFe)
+
+### Step 3p: Calculate PI Count and Structure
+
+```
+pi_length = scaffolding.pi_length_weeks          # typically 10
+iter_length = scaffolding.iteration_length_weeks  # typically 2
+ip_weeks = scaffolding.ip_iteration_weeks         # typically 2
+
+num_pis = max(1, round(total_weeks / pi_length))
+```
+
+For each PI, calculate the internal structure. PI Planning and Inspect & Adapt are **overlapping events** — they share dates with the first iteration and IP iteration respectively, matching how SAFe actually works:
+
+```
+dev_weeks = pi_actual_weeks - ip_weeks
+num_iterations = max(1, floor(dev_weeks / iter_length))
+
+# IP iteration gets the final ip_weeks (shortened if PI is short)
+ip_actual_weeks = min(ip_weeks, max(1, pi_actual_weeks - num_iterations * iter_length))
+```
+
+If the project is shorter than `pi_length`, create a single shortened PI. Reduce IP to 1 week if needed, then derive iteration count from remaining time.
+
+### Step 4p: Calculate PI Boundaries
+
+```
+cursor = start_date
+
+for i in 1..num_pis:
+  pi_start = cursor
+  if i == num_pis:
+    pi_end = project end_date
+  else:
+    first_friday = next_friday_on_or_after(pi_start)
+    pi_end = first_friday + (pi_length - 1) * 7 days
+  store pi_start, pi_end
+  cursor = next_monday_after(pi_end)
+```
+
+### Step 5p: Create PI Tasks (Depth 0)
+
+```
+general_crud_tool:
+  model_name: "Task"
+  action: "create"
+  attributes:
+    name: "PI {i}"
+    project_id: {project_id}
+    tenant_id: 22
+    start_date: {pi_start}
+    due_date: {pi_end}
+    description: "{descriptions[pi.phase]}"
+
+apply_status_tool:
+  model_name: "Task"
+  id: {task_id}
+  status: "task_not_started"
+```
+
+### Step 6p: Create PI Internal Structure (Depth 1)
+
+Create child tasks in this order for correct WBS:
+
+**1. PI Planning** — first 2 business days of the PI (overlaps with Iteration 1):
+```
+name: "PI Planning"
+start_date: {pi_start}
+due_date: {pi_start + 1 business day}
+description: "{descriptions[pi.pi_planning]}"
+```
+
+**2. Development Iterations** — 2 weeks each, starting from PI start (Iteration 1 shares its first week with PI Planning):
+```
+iter_cursor = pi_start
+
+for j in 1..num_iterations:
+  iter_start = iter_cursor
+  first_friday = next_friday_on_or_after(iter_start)
+  iter_end = first_friday + (iter_length - 1) * 7 days
+
+  name: "Iteration {j}"
+  start_date: {iter_start}
+  due_date: {iter_end}
+  description: "{descriptions[pi.iteration]}"
+
+  iter_cursor = next_monday_after(iter_end)
+```
+
+**3. IP Iteration** — starts after last dev iteration, runs to PI end:
+```
+name: "IP Iteration"
+start_date: {iter_cursor}
+due_date: {pi_end}
+description: "{descriptions[pi.ip_iteration]}"
+```
+
+**4. Inspect & Adapt** — last business day of the PI (overlaps with IP end):
+```
+name: "Inspect & Adapt"
+start_date: {pi_end}
+due_date: {pi_end}
+description: "{descriptions[pi.inspect_and_adapt]}"
+```
+
+Apply `task_not_started` status to all tasks after creation.
+
+Repeat for all PIs. Each PI gets the same internal structure; iteration count may vary for shortened PIs.
+
+---
+
 ## Date Rules
 
 1. **Week-based calculation:** Durations (phase or sprint) are in whole weeks. This produces clean Mon–Fri boundaries naturally.
@@ -370,10 +486,11 @@ To add scaffolding support to a new lifecycle:
 
 ### Structure Types
 
-- `phases` — sequential temporal divisions with duration percentages (RUP, waterfall, native)
+- `phases` — sequential temporal divisions with duration percentages (RUP, Waterfall, Native)
 - `sprints` — repeating timebox pattern (Scrum)
-- `columns` — flow-based, no temporal divisions (kanban) — not yet implemented
-- `moments` — non-linear progression (prototyping) — not yet implemented
+- `program_increments` — repeating timeboxes with internal structure (SAFe)
+- `columns` — flow-based, no temporal divisions (Kanban) — not yet implemented
+- `moments` — non-linear progression (Prototyping) — not yet implemented
 
 ## Validation Checklist
 
