@@ -22,7 +22,7 @@ Please:
 This project uses the SDLC process from ~/src/ops/sdlc.
 
 Please read:
-- ~/src/ops/sdlc/process/overview.md for workflow
+- ~/src/ops/sdlc/lifecycles/native.md for our default workflow
 - ./CLAUDE.md for project-specific context
 - ./docs/current_work/ for active deliverables
 ```
@@ -36,21 +36,21 @@ Please read:
 | Start new deliverable | "Let's create a spec for D[next number]: [feature name]" |
 | Implement a spec | "Please implement D42 following the planning doc" |
 | Archive completed work | "Let's organize the chronicles" |
-| **Reconcile ad hoc work** | **"Let's catalog our ad hoc work"** |
+| **Reconcile prototyping work** | **"Let's catalog our ad hoc work"** |
 | **Audit compliance** | **"Let's run an SDLC compliance audit"** |
 | Check process | "What's our SDLC workflow?" |
 
 ---
 
-## After Ad Hoc Work
+## After Prototyping Work
 
-Been doing quick fixes without formal specs? That's fine. When ready to reconcile:
+Been doing quick fixes or exploratory work without formal specs? That's fine. When ready to reconcile:
 
 ```
 Let's catalog our ad hoc work.
 
 Please:
-1. Read ~/src/ops/sdlc/process/ad_hoc_reconciliation.md
+1. Read ~/src/ops/sdlc/lifecycles/prototyping.md (see Reentry section)
 2. Review commits since last formal deliverable
 3. Propose how to document what we've done
 4. Help me update any specs that need it
@@ -63,9 +63,10 @@ Please:
 | File | Purpose |
 |------|---------|
 | `~/src/ops/sdlc/BOOTSTRAP.md` | How to initialize a project |
-| `~/src/ops/sdlc/process/overview.md` | The workflow |
-| `~/src/ops/sdlc/process/ad_hoc_reconciliation.md` | Rejoining process after ad hoc work |
-| `~/src/ops/sdlc/process/compliance_audit.md` | Auditing project compliance |
+| `~/src/ops/sdlc/lifecycles/native.md` | Our default workflow |
+| `~/src/ops/sdlc/lifecycles/prototyping.md` | Prototyping lifecycle + reconciliation process |
+| `~/src/ops/sdlc/operations/conventions.md` | Deliverable IDs, file suffixes, principles |
+| `~/src/ops/sdlc/operations/compliance_audit.md` | Auditing project compliance |
 | `~/src/ops/sdlc/templates/` | Document templates |
 | `./CLAUDE.md` | Project-specific context |
 | `./docs/current_work/` | Active deliverables |

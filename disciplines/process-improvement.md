@@ -15,7 +15,7 @@ The single most important principle governing all process improvement work. Both
 Our framework must function as a toolbox: helpful, available prescriptions for common needs, with no overhead that isn't needed or requested. This means:
 
 - **Process is pulled, not pushed.** Teams reach for a discipline when they need it. Nobody mandates all eight disciplines for every project.
-- **Ad hoc is legitimate.** Vibe coding, exploratory prototyping, and "just build it" are valid approaches. The process accommodates them (see ad hoc reconciliation) rather than fighting them.
+- **Ad hoc is legitimate.** Vibe coding, exploratory prototyping, and "just build it" are valid approaches. The process accommodates them (see `lifecycles/prototyping.md`) rather than fighting them.
 - **Overhead earns its place.** Every process element must demonstrate value before it becomes standard. "We should have done X" is the trigger, not "the process says we must do X."
 - **Skills inherit this principle.** When disciplines become Claude Code skills, each skill should be independently invocable and immediately useful — not part of a mandatory pipeline.
 - **Maturity is not ceremony.** Moving from CMMI Level 1 to Level 2 means the process is *documented and repeatable when invoked*, not that it's always invoked.

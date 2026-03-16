@@ -40,15 +40,15 @@ No lifecycle is inherently better. The right choice depends on team size, regula
 
 ## Relationship to Our SDLC
 
-Our native process (`process/overview.md`) is a lightweight iterative lifecycle:
+Our native lifecycle (`lifecycles/native.md`) is a lightweight, deliverable-driven flow:
 
 ```
 Idea → Spec → Planning → Prompt → Implementation → Validation → Deploy → Result → Chronicle
 ```
 
-This is not a competing lifecycle — it's our **default implementation** of the lifecycle concept. Each lifecycle file in this directory describes how to adapt the discipline toolbox to that methodology's structure, and how our native artifacts (specs, plans, results, chronicles) map onto that lifecycle's phases and ceremonies.
+This is not a competing lifecycle — it's our **default implementation** of the lifecycle concept, sitting between Prototyping and Kanban on the ceremony spectrum. Each lifecycle file in this directory describes how to adapt the discipline toolbox to that methodology's structure, and how our native artifacts (specs, plans, results, chronicles) map onto that lifecycle's phases and ceremonies.
 
-Teams already using a methodology can adopt our disciplines without changing their lifecycle. Teams without a methodology start with our native process or prototyping, and can adopt more structure as needed.
+Teams already using a methodology can adopt our disciplines without changing their lifecycle. Teams without a methodology start with our native lifecycle or prototyping, and can adopt more structure as needed.
 
 ## Structure
 

@@ -1,6 +1,6 @@
 # Testing Discipline
 
-**Status**: Adopted — codified in `process/overview.md` (Validation phase) and `process/deliverable_lifecycle.md` (Validated/Deployed states)
+**Status**: Adopted — codified in `lifecycles/native.md` (Validation phase) and `operations/deliverable_lifecycle.md` (Validated/Deployed states)
 **Architecture reference**: `improvement-ideas/hybrid-browser-testing.md`
 **Knowledge store**: `knowledge/testing/` (cross-project), project `docs/testing/knowledge/` (project-specific)
 **Spec format prototype**: `improvement-ideas/test-spec-format-draft.md`
@@ -39,11 +39,141 @@ This rule exists because of a real failure: a test agent declared a file-delete 
 
 **Shorthand for test specs:** "Persist-verify" or "round-trip verify" — meaning the test must prove the mutation survived a full client reset.
 
+## Agent Capability Requirements for Testing Roles
+
+When spawning agent teams with a testing role, the agent type must match the SDLC testing workflow. The hybrid approach (CiC exploration + Playwright execution) requires specific tool access.
+
+**Lesson learned (2026-03-07, Burndown feature):** A `test-agent` type was spawned for convergence testing. It could only use CiC browser automation (screenshots, clicks, find, read_page) — no file write, no bash. It could not write Playwright test scripts or run `npx playwright test`, making it unable to execute the SDLC testing workflow. It faithfully attempted workarounds within its constraints but could not follow the process as designed.
+
+**Rule:** Testing agents that follow this SDLC must be `general-purpose` type, not `test-agent`. They need:
+
+| Capability | Why | Tool |
+|-----------|-----|------|
+| File write | Create Playwright test specs | Write, Edit |
+| Bash execution | Run `npx playwright test`, check results | Bash |
+| File read | Read existing test patterns, fixtures, config | Read, Glob, Grep |
+| CiC (optional) | Visual recon, UI maps, element catalog | mcp__claude-in-chrome__* |
+
+**Future enhancement:** Agent role definitions in planning docs should include a "required capabilities" checklist. The team creation system could eventually validate that the chosen agent type satisfies the role's requirements. See Harmoniq memory #1076 for the full design note.
+
+**CiC vs Playwright division of labor:**
+- **CiC:** Quick visual validation, element discovery, UI mapping, exploratory checks
+- **Playwright:** Actual test execution, persistence rule verification, regression suites
+- **Never:** Use `javascript_tool` as a substitute for real UI interactions in either tool
+
+## Implementation-Derived Test Specifications
+
+**Status:** Adopted (2026-03-08) — learned from Burndown feature Phases 1-3
+**Harmoniq memory:** #1076 (agent capabilities), #1077 (auth fixture refactor)
+
+### The Problem
+
+During the Burndown feature build, the tester was given high-level scenario descriptions ("verify sprint CRUD persists", "verify burndown chart renders") but NOT the implementation-level detail needed to write precise tests. This caused three classes of misses:
+
+1. **Missing UI elements** — Sprint assignment dropdown was in the plan (Step 1.17) but never implemented. The tester couldn't test for something it didn't know should exist.
+2. **Wrong values accepted as correct** — Burndown chart showed "5" (task count) instead of "96" (sum of etc_hours). The tester verified "chart renders with data" without knowing the expected value.
+3. **Cross-cutting pattern gaps** — `task.project_id` vs `task.projectId` camelCase inconsistency was a known pattern in other code but wasn't flagged as a risk for new components.
+
+### The Solution: Plan-Derived Test Spec
+
+After implementation and before testing, the **Lead/Architect generates a test specification derived from the implementation plan and actual code.** This is the bridge artifact between "what we built" and "what to test."
+
+The test spec is NOT written by the tester (who discovers elements at runtime) or the coder (who knows the code but not the test perspective). It's written by the Lead who has both the plan context and access to the implemented code.
+
+### Test Spec Format
+
+Each entry in a plan-derived test spec follows this structure:
+
+```yaml
+- id: TST-001
+  plan_step: "1.17"  # Reference to implementation plan step
+  feature: "Sprint assignment on task Estimates tab"
+
+  element:
+    component: TaskViewEditModal
+    location: "Estimates tab (activeTab === 5)"
+    type: FormControl + Select
+    label: "Sprint"
+    condition: "Only visible when task.project_id is set"
+
+  action:
+    type: select
+    value: "Sprint 1 - Auth Module (2026-03-09 — 2026-03-20)"
+
+  api:
+    method: POST
+    endpoint: "/api/v1/sprint_items"
+    payload: "{ sprint_id, sprintable_type: 'Task', sprintable_id }"
+    response: "SprintItem with added_at timestamp"
+
+  verify:
+    immediate: "Dropdown shows selected sprint name"
+    persistence: "Close modal → reopen → Estimates tab → dropdown still shows sprint"
+    value: "Sprint name with date range in parentheses"
+
+  risks:
+    - "task.project_id may be camelCase (projectId) depending on source page"
+    - "Sprint list empty if no sprints created for this project"
+```
+
+### Key Principles
+
+1. **Every plan step becomes a test entry.** If the plan says "Step 1.17: Sprint assignment dropdown", the test spec has a TST entry for it. Missing test entries = missing implementation.
+
+2. **Expected values, not just presence.** "Chart shows remaining = 96" not "chart renders." "Scope = sum(etc_hours) for sprint tasks" not "scope > 0."
+
+3. **Conditions documented.** "Only visible when project uses 'both' estimation unit" — the tester knows to set up the precondition and also test the negative case.
+
+4. **API contracts included.** The tester knows what endpoint should fire and what the response should contain. This catches "API returns 401" issues early.
+
+5. **Risks carry forward.** The Analyst's review findings become test risks. "camelCase fallback pattern" becomes a test that exercises both code paths.
+
+### Workflow Integration
+
+```
+Implementation Plan (Lead)
+    ↓
+Coder implements + Analyst reviews
+    ↓
+Lead generates Plan-Derived Test Spec (reads plan + actual code)
+    ↓
+Tester writes Playwright scripts from test spec
+    ↓
+Convergence testing with value-level assertions
+```
+
+The test spec is stored alongside other SDLC artifacts:
+- Location: `docs/00_CURRENT_WORK/testing/{feature}_test_spec.yaml` (or .md)
+- Archived after feature completion to `docs/00_CHRONICLE/`
+
+### Relationship to Existing Test Spec Format
+
+The existing test spec format (`improvement-ideas/test-spec-format-draft.md`) is designed for **standalone feature pages** — it describes what exists and how to test it. The plan-derived test spec is its upstream input — it describes **what SHOULD exist** based on the plan, so the tester can verify completeness before exploring behavior.
+
+They work together:
+- **Plan-derived spec** → "These 12 UI elements should exist with these behaviors" (completeness)
+- **Feature test spec** → "Here are 7 scenarios exercising those elements including edge cases" (depth)
+
+The plan-derived spec catches "sprint dropdown is missing." The feature test spec catches "sprint dropdown doesn't handle the no-sprints-available edge case."
+
+### Generating the Test Spec
+
+The Lead generates the test spec by:
+1. Reading each step in the implementation plan
+2. Reading the actual implemented code (component files, service files)
+3. For each plan step, extracting: element location, label, condition, action, expected API call, expected value, persistence check
+4. Adding risks from the Analyst's review findings
+5. Cross-referencing with existing patterns (e.g., "other tabs handle camelCase — does this one?")
+
+This is the same analysis used to create the Burndown testing walkthrough guide — formalized as a repeatable artifact.
+
 ## Active Questions
 
 - Playwright Test Agents (`--loop=claude`) — verified CLI works, agents not yet tested
 - Custom spec format — prototype done for Brands list, needs iteration
 - Mobile test suite expansion — 5/6 smoke tests pass, need to build out feature-specific mobile tests
+- Agent capability validation — should team creation warn when role needs tools the agent type doesn't have?
+- Plan-derived test spec tooling — should this be auto-generated by the Lead agent, or should there be a skill/command for it?
 
 ## Cycle 1 Results (2026-02-23)
 

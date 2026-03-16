@@ -179,7 +179,7 @@ A subset of a structured team temporarily works in prototyping mode. Requires: d
 
 Our native SDLC flow maps onto prototyping **retroactively**:
 
-| Our artifact | When it appears in ad hoc |
+| Our artifact | When it appears in prototyping |
 |-------------|--------------------------|
 | Idea (D-number) | When you decide the work is worth tracking |
 | Spec | When you need to explain what you built (or plan to keep building) |
@@ -189,6 +189,58 @@ Our native SDLC flow maps onto prototyping **retroactively**:
 | Chronicle | When the ad hoc work completes or gets absorbed into a structured lifecycle |
 
 The key insight: in structured lifecycles, artifacts are created *before* the work. In prototyping, they're created *after* — or not at all. Both are valid. The discipline toolbox ensures that when you do create structure, you know how.
+
+## Reentry: Reconciling Prototyping Work
+
+When prototyping work needs to rejoin a structured lifecycle, the reconciliation process bridges the gap between unstructured exploration and organized process.
+
+### Triggers
+
+Any of these signal it's time to reconcile:
+- "Let's catalog our ad hoc work"
+- "What have we done since D[last]?"
+- "Let's rejoin the process"
+- The Commitment or Reentry moment has arrived
+
+### Reconciliation Process
+
+**1. Discovery** — Identify the boundary since last formal checkpoint:
+- Find the last deliverable-tagged commit or chronicled deliverable
+- List commits since then
+- Categorize each: bug fix, UI tweak, missed requirement, edge case, iteration, trivial
+
+**2. Choose a reconciliation option per item:**
+
+| Option | When to use |
+|--------|-------------|
+| **Absorb** into existing deliverable | Work is related to a recent D-number. Update its COMPLETE doc and optionally its spec. |
+| **Lightweight record** | Standalone work that doesn't warrant a full spec. Create `stepwise_results/adhoc_YYYYMMDD_brief_description.md` |
+| **Batch into polish deliverable** | Group related tweaks into a single `dNN_polish_spec.md` |
+| **Skip tracking** | Truly trivial work (typos, formatting). Acknowledge it happened, move on. |
+
+**3. Spec maintenance** — If prototyping revealed spec gaps, update the specs or create tasks to do so.
+
+**4. Clean git state** — Commit pending changes. Optional reconciliation commit: `docs: reconcile prototyping work [date range]`
+
+**5. Path forward:**
+- Resume formal process (start next D-number with a spec)
+- Continue prototyping (reconcile again later)
+- Chronicle and pause
+
+### Anti-Patterns
+- Creating full spec/planning/prompt for a 2-line fix
+- Feeling guilty about prototyping work
+- Letting prototyping work accumulate for weeks without reconciliation
+- Abandoning process entirely because "it's too heavy"
+
+### For CC: Handling Prototyping Requests
+
+When CD asks for quick changes without a deliverable ID:
+1. **Do the work** — Don't block on process
+2. **Note it** — Remember this is prototyping
+3. **Offer reconciliation** — After several items, suggest: "We've done several small changes. Want to catalog them?"
+
+When CD explicitly says "just do X, skip the process": comply, don't lecture, offer to reconcile later.
 
 ## Transition Triggers
 

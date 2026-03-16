@@ -7,7 +7,7 @@ This framework is a toolbox of available capabilities, not a prescribed sequence
 Both RUP and SAFe included "tailor the methodology" as a core principle, but their ecosystems made the full prescription the path of least resistance. We learn from that mistake. Nothing here is mandatory overhead. Disciplines, knowledge stores, spec formats, knowledge layers — they exist *when you need them* and stay out of the way when you don't.
 
 **Guidelines:**
-- Vibe coding is valid. Exploratory and creative work benefits from minimal process. The ad hoc accommodations in `process/overview.md` exist for exactly this reason.
+- Vibe coding is valid. Exploratory and creative work benefits from minimal process. The Prototyping lifecycle (`lifecycles/prototyping.md`) exists for exactly this reason.
 - Use the discipline that helps. Ignore the ones that don't. A quick prototype doesn't need Layer 0 risk analysis.
 - Add process only when its absence caused a problem. "We should have written a spec" is the right trigger, not "the process says we must write a spec."
 - Each discipline should deliver value immediately when invoked, not require setup, ceremony, or prerequisite steps.
@@ -15,7 +15,7 @@ Both RUP and SAFe included "tailor the methodology" as a core principle, but the
 
 ## The Key Distinction: Disciplines vs Phases
 
-Our SDLC process (`process/overview.md`) describes **phases** — the temporal stages work moves through:
+Our native lifecycle (`lifecycles/native.md`) describes **phases** — the temporal stages work moves through:
 
 ```
 Idea → Spec → Planning → Implementation → Result → Chronicle
@@ -84,11 +84,12 @@ disciplines/
 
 ## Relationship to Existing SDLC
 
-| Existing | Discipline view |
-|----------|-----------------|
-| `process/` | Phase definitions — *when* work happens |
-| `disciplines/` | Capability definitions — *what* capabilities are applied |
-| `templates/` | Phase-oriented artifacts (spec, plan, result) |
+| Directory | Role |
+|-----------|------|
+| `lifecycles/` | How work is organized over time — *when* and *how intensely* disciplines are applied |
+| `disciplines/` | Capability definitions — *what* capabilities are available |
+| `operations/` | Infrastructure — conventions, roles, artifact management, compliance |
+| `templates/` | Artifact templates (spec, plan, result) |
 | `knowledge/` | Discipline-specific knowledge stores (testing, data-modeling, etc.) |
 | `improvement-ideas/` | Active design work on discipline improvements |
 
