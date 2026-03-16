@@ -46,6 +46,69 @@ phases:
       - users trained and productive
       - support processes in place
       - lessons learned captured
+scaffolding:
+  structure_type: phases
+  descriptions: portablemind-skills/rup-descriptions.md
+  phase_durations:
+    inception: 0.10
+    elaboration: 0.30
+    construction: 0.50
+    transition: 0.10
+  disciplines:
+    - { key: business_modeling, label: "Business Modeling" }
+    - { key: requirements, label: "Requirements" }
+    - { key: analysis_design, label: "Analysis & Design" }
+    - { key: implementation, label: "Implementation" }
+    - { key: test, label: "Test" }
+    - { key: deployment, label: "Deployment" }
+    - { key: project_management, label: "Project Management" }
+    - { key: environment, label: "Environment" }
+  intensity_spans:
+    high: [0.0, 1.0]
+    medium: [0.25, 1.0]
+    low: [0.67, 1.0]
+  phase_disciplines:
+    inception:
+      business_modeling: high
+      requirements: high
+      analysis_design: medium
+      implementation: low
+      test: low
+      deployment: low
+      project_management: high
+      environment: high
+    elaboration:
+      business_modeling: medium
+      requirements: medium
+      analysis_design: high
+      implementation: high
+      test: medium
+      deployment: low
+      project_management: high
+      environment: medium
+    construction:
+      business_modeling: medium
+      requirements: medium
+      analysis_design: medium
+      implementation: high
+      test: high
+      deployment: medium
+      project_management: high
+      environment: low
+    transition:
+      business_modeling: low
+      requirements: low
+      analysis_design: low
+      implementation: medium
+      test: high
+      deployment: high
+      project_management: high
+      environment: low
+  milestones:
+    inception: "LCO Milestone Review"
+    elaboration: "LCA Milestone Review"
+    construction: "IOC Milestone Review"
+    transition: "GA Milestone Review"
 ---
 
 # RUP Lifecycle (Rational Unified Process)
