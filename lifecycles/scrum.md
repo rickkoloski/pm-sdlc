@@ -45,6 +45,16 @@ gates:
     - tests pass
     - documented
     - potentially shippable
+scaffolding:
+  structure_type: sprints
+  descriptions: portablemind-skills/scrum-descriptions.md
+  sprint_length_weeks: 2
+  events:
+    - { key: sprint_planning, label: "Sprint Planning", timing: [0.0, 0.0] }
+    - { key: daily_work, label: "Daily Work", timing: [0.0, 1.0] }
+    - { key: backlog_refinement, label: "Backlog Refinement", timing: [0.4, 0.9] }
+    - { key: sprint_review, label: "Sprint Review", timing: [1.0, 1.0] }
+    - { key: sprint_retrospective, label: "Sprint Retrospective", timing: [1.0, 1.0] }
 ---
 
 # Scrum Lifecycle

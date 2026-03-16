@@ -28,24 +28,33 @@ Generate a fully structured Harmoniq project from an SDLC lifecycle definition a
 
 Read `lifecycles/{lifecycle}.md` and parse YAML frontmatter. Extract the `scaffolding` key. If no `scaffolding` key exists, stop and report that the lifecycle doesn't support parameterized scaffolding yet.
 
-Required scaffolding fields:
-- `structure_type` — currently only `phases` is implemented
+Required scaffolding fields vary by `structure_type`:
+
+**For `phases` (e.g., RUP, Waterfall):**
 - `phase_durations` — map of phase key → decimal (must sum to 1.0)
 - `disciplines` — ordered list of `{ key, label }` objects
 - `intensity_spans` — map of intensity level → `[start_pct, end_pct]`
 - `phase_disciplines` — map of phase key → map of discipline key → intensity level
 - `milestones` — map of phase key → milestone task name
 
-Optional scaffolding fields:
-- `descriptions` — relative path to a descriptions file (e.g., `portablemind-skills/rup-descriptions.md`)
+**For `sprints` (e.g., Scrum):**
+- `sprint_length_weeks` — integer (1-4, typically 2)
+- `events` — ordered list of `{ key, label, timing: [start_pct, end_pct] }` objects
+
+**Common optional fields:**
+- `descriptions` — relative path to a descriptions file
 
 ### Step 1b: Load Descriptions
 
-If `scaffolding.descriptions` is set, read the referenced file. Descriptions are keyed by markdown headings in the format `### {phase}.{discipline}` (e.g., `### inception.requirements`). The text below each heading is the task description.
+If `scaffolding.descriptions` is set, read the referenced file. Descriptions are keyed by markdown headings in the format `### {context}.{key}`.
 
-Special keys:
+**For phases:** `### {phase}.{discipline}` (e.g., `### inception.requirements`)
 - `{phase}.phase` — description for the phase task itself (depth 0)
 - `{phase}.milestone` — description for the milestone task
+
+**For sprints:** `### sprint.{event}` (e.g., `### sprint.sprint_planning`)
+- `sprint.phase` — description for each Sprint N task (depth 0, reused across all sprints)
+- `sprint.{event_key}` — description for each event task (depth 1, reused across all sprints)
 
 If no descriptions file exists, tasks are created without descriptions.
 
@@ -60,6 +69,12 @@ Else:
 
 total_weeks = total_days / 7  (keep as float)
 ```
+
+**If `structure_type` is `phases`, continue with Steps 3-8. If `sprints`, skip to Steps 3s-6s.**
+
+---
+
+## Phases Algorithm (RUP, Waterfall, etc.)
 
 ### Step 3: Calculate Phase Weeks
 
@@ -195,16 +210,118 @@ apply_status_tool:
   status: "task_not_started"
 ```
 
+---
+
+## Sprints Algorithm (Scrum)
+
+### Step 3s: Calculate Sprint Count
+
+```
+sprint_length = scaffolding.sprint_length_weeks
+num_full_sprints = floor(total_weeks / sprint_length)
+remainder_weeks = total_weeks - (num_full_sprints * sprint_length)
+
+if remainder_weeks >= 1:
+  num_sprints = num_full_sprints + 1  # shortened final sprint
+  warn: "Final sprint is {remainder_weeks} weeks (shorter than standard {sprint_length})"
+else:
+  num_sprints = num_full_sprints
+
+if num_sprints == 0: num_sprints = 1  # minimum 1 sprint
+```
+
+### Step 4s: Calculate Sprint Boundaries
+
+```
+cursor = start_date
+
+for i in 1..num_sprints:
+  sprint_start = cursor
+  if i == num_sprints:
+    sprint_end = project end_date  # last sprint absorbs remainder
+  else:
+    first_friday = next_friday_on_or_after(sprint_start)
+    sprint_end = first_friday + (sprint_length - 1) * 7 days
+  store sprint_start, sprint_end
+  cursor = next_monday_after(sprint_end)
+```
+
+### Step 5s: Create Sprint Tasks (Depth 0)
+
+For each sprint, create a root-level task:
+
+```
+general_crud_tool:
+  model_name: "Task"
+  action: "create"
+  attributes:
+    name: "Sprint {i}"
+    project_id: {project_id}
+    tenant_id: 22
+    start_date: {sprint_start}
+    due_date: {sprint_end}
+    description: "{descriptions[sprint.phase]}"
+
+apply_status_tool:
+  model_name: "Task"
+  id: {task_id}
+  status: "task_not_started"
+```
+
+### Step 6s: Create Event Tasks (Depth 1)
+
+For each event in the `events` list, calculate dates from the `timing` field:
+
+```
+[start_pct, end_pct] = event.timing
+sprint_days = (sprint_end - sprint_start).days
+event_start = sprint_start + round(sprint_days * start_pct)
+event_end = sprint_start + round(sprint_days * end_pct)
+
+# Weekend snap
+if event_start falls on Sat/Sun: snap forward to Monday
+if event_end falls on Sat: snap back to Friday
+if event_end falls on Sun: snap back to Friday
+
+# Single-day events: when start_pct == end_pct, both dates are the same day
+```
+
+Then create the task:
+
+```
+general_crud_tool:
+  model_name: "Task"
+  action: "create"
+  attributes:
+    name: "{event.label}"
+    project_id: {project_id}
+    parent_id: {sprint_task_id}
+    tenant_id: 22
+    start_date: {event_start}
+    due_date: {event_end}
+    description: "{descriptions[sprint.event_key]}"
+
+apply_status_tool:
+  model_name: "Task"
+  id: {task_id}
+  status: "task_not_started"
+```
+
+Repeat for all sprints. Each sprint gets the same set of events with the same descriptions — the pattern repeats.
+
+---
+
 ## Date Rules
 
-1. **Week-based calculation:** Phase durations are converted to whole weeks (rounded). This produces clean Mon–Fri boundaries naturally.
-2. **Phase end = Friday:** Each phase ends on a Friday. The end is calculated as: first Friday on or after phase start + (weeks - 1) * 7 days.
-3. **Phase start = Monday:** Each phase (except possibly the first) starts on the Monday after the previous phase's Friday.
-4. **First phase:** Starts on the project start date, regardless of day of week.
-5. **Last phase:** Ends on the project end date (absorbs rounding from week conversion).
-6. **Minimum duration:** Every phase gets at least 1 week, regardless of percentage.
-7. **Discipline weekend snap:** Start dates snap forward to Monday if they fall on Sat/Sun. End dates snap back to Friday if they fall on Sat/Sun.
-8. **Tolerance:** The algorithm produces dates within ~1 day of hand-calculated layouts. This is acceptable for the basic parameterization.
+1. **Week-based calculation:** Durations (phase or sprint) are in whole weeks. This produces clean Mon–Fri boundaries naturally.
+2. **Division end = Friday:** Each phase or sprint ends on a Friday. Calculated as: first Friday on or after start + (weeks - 1) * 7 days.
+3. **Division start = Monday:** Each division (except possibly the first) starts on the Monday after the previous division's Friday.
+4. **First division:** Starts on the project start date, regardless of day of week.
+5. **Last division:** Ends on the project end date (absorbs rounding).
+6. **Minimum duration:** Every phase gets at least 1 week. Every sprint gets at least 1 week (shortened final sprint).
+7. **Child task weekend snap:** Start dates snap forward to Monday if they fall on Sat/Sun. End dates snap back to Friday if they fall on Sat/Sun.
+8. **Single-day events:** When timing `[x, x]` (start_pct == end_pct), both start and end are the same day. This is common for Scrum ceremonies (Sprint Planning, Review, Retro).
+9. **Tolerance:** The algorithm produces dates within ~1 day of hand-calculated layouts.
 
 ## Execution Notes
 
@@ -251,10 +368,10 @@ To add scaffolding support to a new lifecycle:
 6. Define `phase_disciplines` — which disciplines appear in which phases at what intensity
 7. Define `milestones` — phase-end milestone names (optional)
 
-### Structure Types (Future)
+### Structure Types
 
 - `phases` — sequential temporal divisions with duration percentages (RUP, waterfall, native)
-- `sprints` — repeating timebox pattern (scrum) — not yet implemented
+- `sprints` — repeating timebox pattern (Scrum)
 - `columns` — flow-based, no temporal divisions (kanban) — not yet implemented
 - `moments` — non-linear progression (prototyping) — not yet implemented
 
