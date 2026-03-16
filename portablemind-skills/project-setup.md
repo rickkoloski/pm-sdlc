@@ -1,9 +1,11 @@
 ---
 name: Harmoniq Project Setup
-description: How to create projects with WBS task hierarchies in Harmoniq via MCP CRUD tools
+description: How to create projects with WBS task hierarchies in Harmoniq via MCP CRUD tools, including lifecycle-based scaffolding with canonical duration distributions
 type: knowledge
 verified: 2026-03-15
-test_project_id: 38
+test_projects:
+  basic_wbs: 38 (deleted after verification)
+  rup_canonical: 39 (active — full RUP layout with discipline descriptions)
 ---
 
 # Harmoniq Project Setup
@@ -185,24 +187,122 @@ Verified in Harmoniq UI (2026-03-15):
 - Gantt timeline picks up all tasks
 - Tasks show "Set Status" until status is applied via `apply_status_tool`
 
+## Lifecycle-Based Project Scaffolding
+
+The SDLC lifecycle definitions (`lifecycles/*.md`) contain structured frontmatter with phase data, discipline intensity ratings, and completion_assertions. This data can drive automatic project scaffolding in Harmoniq.
+
+### Canonical RUP Duration Distribution (Kruchten)
+
+For a project of total duration D:
+
+| Phase | % of Schedule | Typical |
+|-------|--------------|---------|
+| Inception | ~10% | 3 weeks for 6-month project |
+| Elaboration | ~30% | 8 weeks |
+| Construction | ~50% | 13 weeks |
+| Transition | ~10% | 3 weeks |
+
+### Canonical RUP Effort Distribution by Discipline
+
+Each discipline appears in every phase but with varying intensity. The percentages show what fraction of that discipline's total effort falls in each phase:
+
+| Discipline | Inception | Elaboration | Construction | Transition |
+|-----------|-----------|-------------|--------------|------------|
+| Business Modeling | ~28% | ~28% | ~28% | ~16% |
+| Requirements | ~38% | ~18% | ~24% | ~20% |
+| Analysis & Design | ~8% | ~36% | ~36% | ~20% |
+| Implementation | ~4% | ~24% | ~56% | ~16% |
+| Test | ~4% | ~12% | ~52% | ~32% |
+| Deployment | ~4% | ~4% | ~24% | ~68% |
+| Project Management | ~16% | ~28% | ~32% | ~24% |
+| Environment | ~40% | ~20% | ~20% | ~20% |
+
+### Scaffolding Pattern
+
+1. **Create project** with `start_date` and `end_date`
+2. **Apply status** (`in_progress`)
+3. **Create phase tasks** (depth 0) with dates calculated from duration percentages
+4. **Create discipline tasks** (depth 1) under each phase, with date spans reflecting intensity:
+   - High-intensity disciplines span the full phase
+   - Medium-intensity disciplines start or end partway through
+   - Low-intensity disciplines get a short window at the appropriate point
+5. **Create milestone tasks** (depth 1) as zero-duration tasks on the phase end date (LCO, LCA, IOC, GA)
+6. **Add descriptions** explaining WHY each discipline appears in that phase — critical for teaching the methodology
+
+### Description Pattern
+
+Discipline descriptions should explain the non-obvious:
+- **Why is Business Modeling in Transition?** User acceptance reveals "this isn't how we actually work" gaps
+- **Why is Test in Inception?** Testing assumptions, not code — testability analysis
+- **Why is Implementation in Inception?** Throwaway prototypes only for critical risk mitigation
+- **Why is Deployment in Elaboration?** CI/CD pipeline setup, not production deployment
+- **Why is Environment in Inception at 40%?** Tooling setup pays compound dividends — highest per-phase investment
+
+Include effort percentages in descriptions (e.g., "56% of total implementation effort") to ground the duration in the canonical data.
+
 ## Test Artifacts
 
-Project "SDLC Setup Test" (id: 38) was created to verify these operations. The resulting WBS:
+### Test 1: Basic WBS (deleted)
+Project "SDLC Setup Test" (id: 38) verified CRUD, indent/outdent, and status visibility.
+
+### Test 2: Canonical RUP Layout (active)
+Project "RUP Canonical Layout" (id: 39) — 6-month project, Apr 1 – Oct 2, 2026.
 
 ```
-1. Inception (id:782, depth:0)
-  1.1 Define scope and vision (id:785, depth:1)
-    1.1.1 Draft vision document (id:788, depth:2)
-  1.2 Identify key risks (id:786, depth:1)
-2. Elaboration (id:783, depth:0)
-  1.3 Stakeholder alignment (id:787, depth:1)  ← moved from Inception via parent_id update
-3. Construction (id:784, depth:0)
+Inception (Apr 1 – Apr 18, 3 wks)
+  Business Modeling          Apr 1 – Apr 18   (full phase)
+  Requirements               Apr 1 – Apr 18   (full phase)
+  Analysis & Design          Apr 7 – Apr 18   (starts week 2)
+  Implementation             Apr 14 – Apr 18  (last week only — prototypes)
+  Test                       Apr 14 – Apr 18  (last week — testing assumptions)
+  Deployment                 Apr 14 – Apr 18  (last week — planning only)
+  Project Management         Apr 1 – Apr 18   (full phase)
+  Environment                Apr 1 – Apr 18   (full phase — 40% of total env effort)
+  LCO Milestone Review       Apr 18
+
+Elaboration (Apr 21 – Jun 13, 8 wks)
+  Business Modeling          Apr 21 – May 15  (first half — refine domain model)
+  Requirements               Apr 21 – May 22  (front-loaded)
+  Analysis & Design          Apr 21 – Jun 13  (full phase — architecture peak)
+  Implementation             Apr 28 – Jun 13  (starts week 2 — executable architecture)
+  Test                       May 4 – Jun 13   (starts week 3 — test the architecture)
+  Deployment                 May 18 – Jun 5   (mid-phase — CI/CD pipeline)
+  Project Management         Apr 21 – Jun 13  (full phase — 28% peak)
+  Environment                Apr 21 – May 15  (first half — finalize tooling)
+  LCA Milestone Review       Jun 13
+
+Construction (Jun 16 – Sep 12, 13 wks)
+  Business Modeling          Jun 16 – Jul 31  (first half — winding down)
+  Requirements               Jun 16 – Aug 7   (two-thirds — refine as you build)
+  Analysis & Design          Jun 16 – Aug 21  (three-quarters — detailed design)
+  Implementation             Jun 16 – Sep 12  (full phase — 56% of total impl)
+  Test                       Jun 23 – Sep 12  (near-full — 52% of total test)
+  Deployment                 Jul 27 – Sep 12  (second half — staging deploys)
+  Project Management         Jun 16 – Sep 12  (full phase — 32% steady)
+  Environment                Jun 16 – Jul 17  (first third — maintenance only)
+  IOC Milestone Review       Sep 12
+
+Transition (Sep 15 – Oct 2, 3 wks)
+  Business Modeling          Sep 15 – Sep 19  (first week — acceptance gaps)
+  Requirements               Sep 15 – Sep 19  (first week — capture changes)
+  Analysis & Design          Sep 15 – Sep 22  (first half — perf tuning)
+  Implementation             Sep 15 – Sep 26  (two-thirds — defect fixes only)
+  Test                       Sep 15 – Oct 2   (full phase — acceptance testing)
+  Deployment                 Sep 15 – Oct 2   (full phase — 68% peak, production)
+  Project Management         Sep 15 – Oct 2   (full phase — closeout)
+  Environment                Sep 15 – Sep 22  (first half — prod hardening)
+  GA Milestone Review        Oct 2
 ```
+
+All 40 tasks include descriptions explaining why each discipline appears in each phase, with canonical effort percentages.
 
 ## Next Steps
 
-- [x] Status management — `apply_status_tool` required for UI visibility (projects and likely tasks)
-- [ ] Resource assignments (assign parties to tasks)
-- [ ] Task types (classify tasks by type)
+- [x] Status management — `apply_status_tool` required for UI visibility
+- [x] Lifecycle-based scaffolding — canonical RUP layout with duration distribution
+- [x] Discipline descriptions — teaching-quality explanations per phase
+- [ ] Resource assignments (assign parties/roles to tasks — enables effort vs duration)
+- [ ] Task types (classify tasks by discipline, milestone, etc.)
 - [ ] Template file attachments (LlmFile linked to tasks)
-- [ ] Bulk WBS creation pattern (create a full hierarchy from a lifecycle definition)
+- [ ] Parameterized scaffolding (accept project duration, calculate all dates automatically)
+- [ ] Multi-lifecycle support (scaffold from any lifecycle definition, not just RUP)
