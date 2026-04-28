@@ -39,6 +39,67 @@ This rule exists because of a real failure: a test agent declared a file-delete 
 
 **Shorthand for test specs:** "Persist-verify" or "round-trip verify" — meaning the test must prove the mutation survived a full client reset.
 
+## Selector Hygiene — Anchor on data-testid
+
+Test selectors must anchor on stable contract attributes (`data-testid`), not on framework-generated CSS classes or HTML semantic elements. This is a first-class discipline rule alongside the Persistence Rule.
+
+**What counts as a stable anchor:**
+- A `data-testid` attribute placed deliberately by the component author for test consumption
+- (Secondary, when no testid is reachable) a `data-*` attribute carrying domain meaning the component already exposes — e.g., `data-conversation-id`, `data-task-id`
+
+**What does NOT count as a stable anchor:**
+- Framework-generated CSS classes — `.MuiBadge-badge`, `.MuiListItemButton-root`, `.MuiBox-root css-msss26`, `data-emotion-css-...`. These reflect implementation-internal naming that shifts on framework upgrades, theme tweaks, and emotion-cache resets.
+- HTML5 semantic elements assumed by convention but not actually rendered — `page.locator('header')` when the layout uses `<div class="border-layout-north">`, `getByRole('navigation')` when no nav role is set.
+- `:nth-child(N)`, `.first()`, `.last()` ordering hacks — break on layout reorders or async-loaded children.
+- Class names that look semantic but are app-specific styling — `.unread-badge`, `.user-row` — still drift more than testids and aren't a contract.
+
+**Required when adding a regression test:**
+1. Try to locate a `data-testid` on the element you need to anchor on.
+2. If none exists, **add one** as part of the test landing. Two-line additive markup: `data-testid="..."` (+ optional `data-conversation-id={item.id}` when the row's identity matters for the assertion).
+3. Keep the test selector simple: `page.locator('[data-testid="..."]')` — no chained ancestor scoping unless necessary.
+4. If you find yourself wanting to scope by a parent element (e.g., the row containing the badge), give the parent a testid too, or use the row's `data-conversation-id` to disambiguate.
+
+**Why this matters:**
+
+This rule exists because of two specific failures (both Pilot #1434 — cross-tenant unread badges, 2026-04-28):
+
+1. **Channel-row badge selector miss (TST-CTU-01).** Test anchored on `.MuiBadge-badge`. The actual renderer at `SwappableWestPanel.tsx:940-955` was a hand-rolled styled `<Box>` with `MuiBox-root css-msss26` (auto-generated emotion class). Selector never matched, regardless of whether data was correct. Wasted ~30 minutes of debugging the test before recognizing the framework-class assumption was the culprit.
+
+2. **Title-bar badge selector miss (TST-CTU-02).** Test anchored on `page.locator('header')`. The layout uses `<div class="border-layout-north">`, not an HTML5 `<header>` element. The locator chain bottomed out before reaching the badge. Same defect class, surfaced separately.
+
+In both cases, the data flow worked end-to-end; only the test selector was wrong. The fix in both cases was Option B: add a `data-testid` to the component, key the test off it.
+
+**Shorthand for test specs:** "testid-anchor." When reviewing a test, ask: "What's the contract attribute? If it's a framework class, that's a smell."
+
+**Tied to roles:** the `cc-role: testability-impl` role exists specifically to add testids to product code. Reach for it when a regression test needs an anchor that doesn't yet exist. The product change is small (~2 lines) and its presence is itself part of the SDLC contract.
+
+## Sibling Fix-Impl Subtask Pattern (Multi-Class Defect Pilots)
+
+When a coverage-first pilot surfaces defects across **two or more architectural classes**, file **sibling fix-impl subtasks under the same pilot parent** — one subtask per class. **Don't expand a completed subtask's scope.**
+
+**The rule:**
+- One fix-impl subtask covers defects that share an architectural class (same SQL pattern, same OR-block, same component lifecycle).
+- When a defect surfaces that's structurally different (e.g., a frontend hook race vs. a backend SQL filter), file a NEW fix-impl subtask under the same pilot parent. The pilot's user-visible success metric (regression tests GREEN) requires both subtasks to complete.
+- A subtask whose handback chronicle is complete (Stages 1–5 of the verification ritual all done, branch pushed) is **closed** in spirit. Adding new defects to its scope retroactively muddies that chronicle and breaks audit trails. File a sibling instead.
+
+**What counts as a "different architectural class":**
+- Different file/module surfaces (e.g., `notifications_channel.rb` SQL vs. `useUnreadSubscription.ts` hook lifecycle)
+- Different mechanism categories (state-management race vs. SQL filter vs. broadcast routing)
+- Different verification approaches required (RSpec contract test vs. Playwright fiber probe)
+
+**What does NOT count (these stay in one subtask):**
+- Multiple defects in the same OR-block, same SQL clause, or same callback chain
+- Multiple files touched by the same conceptual fix shape
+- Defects that share a single repro recipe and a single fix commit
+
+**Why this matters:**
+
+This rule exists because of a real failure mode: when a multi-class pilot expands an already-closed subtask's scope, the handback chronicle stops cleanly mapping "this branch fixed these defects." The chronicle becomes a moving target. The next reviewer has to read across edits to figure out what was actually shipped when. Sibling subtasks keep each chronicle as a frozen, audit-ready snapshot.
+
+**Real-world example (Pilot #1434, 2026-04-28):** initial fix-impl subtask covered four defects that shared an architectural class (backend tenant-scoping assumption in unread-broadcast SQL). Validation surfaced a fifth defect — a React StrictMode race in a frontend hook. Different class entirely. Filed as a NEW sibling fix-impl subtask under the same pilot parent rather than re-opening the original subtask. Both shipped clean handback chronicles; the pilot closed cleanly with both flipping the user-visible regression tests GREEN.
+
+**Cross-reference:** the multi-agent handoff and verification ritual that produces these chronicles is documented in `~/src/ops/sdlc/work-patterns/multi-agent-handoff.md`.
+
 ## Agent Capability Requirements for Testing Roles
 
 When spawning agent teams with a testing role, the agent type must match the SDLC testing workflow. The hybrid approach (CiC exploration + Playwright execution) requires specific tool access.

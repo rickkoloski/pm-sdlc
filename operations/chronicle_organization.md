@@ -1,4 +1,8 @@
-# Chronicle Organization
+# Chronicle Organization (Archiving)
+
+**Also known as:** archive, archiving, chronicle, organize, sdlc archive, sdlc chronicle, organize the chronicles, archive completed work
+
+Two user mental models reach the same operation: "let's *chronicle* completed work" and "let's *archive* completed work". This skill covers both — the underlying operation is moving completed deliverables out of `current_work/` into `chronicle_by_concept/` (and `chronicle_by_step/`) for long-term project memory.
 
 ## Purpose
 
